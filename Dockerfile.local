@@ -1,0 +1,15 @@
+FROM alpine:latest
+
+ARG CONSOLE_COMMIT
+LABEL org.opencontainers.image.source="https://github.com/IamZoY/console" \
+      org.opencontainers.image.revision="${CONSOLE_COMMIT}"
+
+RUN apk add --no-cache ca-certificates curl
+
+COPY minio /usr/bin/minio
+RUN chmod +x /usr/bin/minio
+
+EXPOSE 9000 9001
+
+ENTRYPOINT ["/usr/bin/minio"]
+
