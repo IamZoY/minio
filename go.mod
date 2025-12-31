@@ -108,7 +108,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
-replace github.com/IamZoY/console => ../console
+// replace github.com/IamZoY/console => ../console // Uncomment for local development
 
 require (
 	aead.dev/mem v0.2.0 // indirect
