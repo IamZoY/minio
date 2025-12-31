@@ -25,7 +25,7 @@ import (
 	"sync"
 	"time"
 
-	consoleapi "github.com/minio/console/api"
+	consoleapi "github.com/IamZoY/console/api"
 	"github.com/minio/dnscache"
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7"

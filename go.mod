@@ -17,6 +17,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.9.0
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.1
 	github.com/IBM/sarama v1.45.1
+	github.com/IamZoY/console v0.0.0-00010101000000-000000000000
 	github.com/alecthomas/participle v0.7.1
 	github.com/beevik/ntp v1.4.3
 	github.com/buger/jsonparser v1.1.1
@@ -51,7 +52,6 @@ require (
 	github.com/lithammer/shortuuid/v4 v4.2.0
 	github.com/miekg/dns v1.1.65
 	github.com/minio/cli v1.24.2
-	github.com/minio/console v1.7.7-0.20250905210349-2017f33b26e1
 	github.com/minio/csvparser v1.0.0
 	github.com/minio/dnscache v0.1.1
 	github.com/minio/dperf v0.6.3
@@ -107,6 +107,8 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 	gopkg.in/yaml.v3 v3.0.1
 )
+
+replace github.com/IamZoY/console => ../console
 
 require (
 	aead.dev/mem v0.2.0 // indirect
