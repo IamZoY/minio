@@ -13,7 +13,7 @@ clusterDomain: cluster.local
 ## Set default image, imageTag, and imagePullPolicy. mode is used to indicate the
 ##
 image:
-  repository: quay.io/minio/minio
+  repository: ghcr.io/iamzoy/minio
   tag: RELEASE.2024-12-18T13-15-44Z
   pullPolicy: IfNotPresent
 

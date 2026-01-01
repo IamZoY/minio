@@ -101,8 +101,8 @@ func TestDownloadURL(t *testing.T) {
 	minioVersion1 := releaseTimeToReleaseTag(UTCNow())
 	durl := getDownloadURL(minioVersion1)
 	if IsDocker() {
-		if durl != "podman pull quay.io/minio/minio:"+minioVersion1 {
-			t.Errorf("Expected %s, got %s", "podman pull quay.io/minio/minio:"+minioVersion1, durl)
+		if durl != "podman pull ghcr.io/iamzoy/minio:"+minioVersion1 {
+			t.Errorf("Expected %s, got %s", "podman pull ghcr.io/iamzoy/minio:"+minioVersion1, durl)
 		}
 	} else {
 		if runtime.GOOS == "windows" {

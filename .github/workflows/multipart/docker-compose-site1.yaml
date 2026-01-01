@@ -2,7 +2,7 @@ version: '3.7'
 
 # Settings and configurations that are common for all containers
 x-minio-common: &minio-common
-  image: quay.io/minio/minio:${RELEASE}
+  image: ghcr.io/iamzoy/minio:${RELEASE}
   command: server http://site1-minio{1...4}/data{1...2}
   environment:
     - MINIO_PROMETHEUS_AUTH_TYPE=public

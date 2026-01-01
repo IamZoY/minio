@@ -37,7 +37,7 @@ jobs:
 
       - name: build-minio
         run: |
-          TAG="quay.io/minio/minio:${{ steps.vars.outputs.sha_short }}" make docker
+          TAG="ghcr.io/iamzoy/minio:${{ steps.vars.outputs.sha_short }}" make docker
 
       - name: multipart uploads test
         run: |
@@ -75,7 +75,7 @@ jobs:
             docker volume rm ${volume} || true
           done
 
-          docker rmi -f quay.io/minio/minio:${{ steps.vars.outputs.sha_short }}
+          docker rmi -f ghcr.io/iamzoy/minio:${{ steps.vars.outputs.sha_short }}
           docker system prune -f || true
           docker volume prune -f || true
           docker volume rm $(docker volume ls -q -f dangling=true) || true
