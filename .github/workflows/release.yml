@@ -1,0 +1,113 @@
+# @format
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag name for the release (e.g., v2025.01.01)'
+        required: true
+        type: string
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+
+      - name: Build MinIO binary (Linux amd64)
+        env:
+          CGO_ENABLED: 0
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          go build -trimpath -ldflags "-s -w" -o minio-linux-amd64 .
+
+      - name: Build MinIO binary (Linux arm64)
+        env:
+          CGO_ENABLED: 0
+          GOOS: linux
+          GOARCH: arm64
+        run: |
+          go build -trimpath -ldflags "-s -w" -o minio-linux-arm64 .
+
+      - name: Build MinIO binary (Darwin amd64)
+        env:
+          CGO_ENABLED: 0
+          GOOS: darwin
+          GOARCH: amd64
+        run: |
+          go build -trimpath -ldflags "-s -w" -o minio-darwin-amd64 .
+
+      - name: Build MinIO binary (Darwin arm64)
+        env:
+          CGO_ENABLED: 0
+          GOOS: darwin
+          GOARCH: arm64
+        run: |
+          go build -trimpath -ldflags "-s -w" -o minio-darwin-arm64 .
+
+      - name: Build MinIO binary (Windows amd64)
+        env:
+          CGO_ENABLED: 0
+          GOOS: windows
+          GOARCH: amd64
+        run: |
+          go build -trimpath -ldflags "-s -w" -o minio-windows-amd64.exe .
+
+      - name: Get tag name
+        id: get_tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate Release Notes
+        id: release_notes
+        run: |
+          echo "## MinIO Release ${{ steps.get_tag.outputs.TAG }}" > release_notes.md
+          echo "" >> release_notes.md
+          echo "This release of MinIO uses the IamZoY/console fork with admin features." >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### Features" >> release_notes.md
+          echo "- Full admin console with user/group/policy management" >> release_notes.md
+          echo "- Service account management" >> release_notes.md
+          echo "- Admin dashboard and widgets" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### Recent Commits" >> release_notes.md
+          git log --oneline -10 >> release_notes.md
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_tag.outputs.TAG }}
+          name: MinIO ${{ steps.get_tag.outputs.TAG }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: ${{ contains(steps.get_tag.outputs.TAG, '-') }}
+          files: |
+            minio-linux-amd64
+            minio-linux-arm64
+            minio-darwin-amd64
+            minio-darwin-arm64
+            minio-windows-amd64.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
