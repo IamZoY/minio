@@ -23,9 +23,9 @@ import (
 	"net/http"
 
 	"github.com/minio/madmin-go/v3"
-	"github.com/minio/minio/internal/auth"
-	"github.com/minio/minio/internal/kms"
-	"github.com/minio/minio/internal/logger"
+	"github.com/iamzoy/minio/internal/auth"
+	"github.com/iamzoy/minio/internal/kms"
+	"github.com/iamzoy/minio/internal/logger"
 	"github.com/minio/pkg/v3/policy"
 )
 

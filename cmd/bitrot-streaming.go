@@ -25,9 +25,9 @@ import (
 	"io"
 	"sync"
 
-	xhttp "github.com/minio/minio/internal/http"
-	"github.com/minio/minio/internal/ioutil"
-	"github.com/minio/minio/internal/ringbuffer"
+	xhttp "github.com/iamzoy/minio/internal/http"
+	"github.com/iamzoy/minio/internal/ioutil"
+	"github.com/iamzoy/minio/internal/ringbuffer"
 )
 
 // Calculates bitrot in chunks and writes the hash into the stream.
