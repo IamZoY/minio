@@ -25,8 +25,8 @@ import (
 
 	jwtgo "github.com/golang-jwt/jwt/v4"
 	jwtreq "github.com/golang-jwt/jwt/v4/request"
-	"github.com/iamzoy/minio/internal/auth"
-	xjwt "github.com/iamzoy/minio/internal/jwt"
+	"github.com/IamZoY/minio/internal/auth"
+	xjwt "github.com/IamZoY/minio/internal/jwt"
 	"github.com/minio/pkg/v3/policy"
 )
 

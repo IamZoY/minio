@@ -23,8 +23,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/iamzoy/minio/internal/bucket/lifecycle"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	"github.com/IamZoY/minio/internal/bucket/lifecycle"
+	xhttp "github.com/IamZoY/minio/internal/http"
 )
 
 func Test_hashDeterministicString(t *testing.T) {

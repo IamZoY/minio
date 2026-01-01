@@ -31,11 +31,11 @@ import (
 	"time"
 
 	"github.com/minio/madmin-go/v3"
-	"github.com/iamzoy/minio/internal/bucket/bandwidth"
-	"github.com/iamzoy/minio/internal/grid"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
-	"github.com/iamzoy/minio/internal/rest"
+	"github.com/IamZoY/minio/internal/bucket/bandwidth"
+	"github.com/IamZoY/minio/internal/grid"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/rest"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

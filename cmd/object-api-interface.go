@@ -26,10 +26,10 @@ import (
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7/pkg/encrypt"
 	"github.com/minio/minio-go/v7/pkg/tags"
-	"github.com/iamzoy/minio/internal/hash"
+	"github.com/IamZoY/minio/internal/hash"
 
-	"github.com/iamzoy/minio/internal/bucket/replication"
-	xioutil "github.com/iamzoy/minio/internal/ioutil"
+	"github.com/IamZoY/minio/internal/bucket/replication"
+	xioutil "github.com/IamZoY/minio/internal/ioutil"
 )
 
 //go:generate msgp -file $GOFILE -io=false -tests=false -unexported=false

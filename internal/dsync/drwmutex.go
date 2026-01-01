@@ -27,8 +27,8 @@ import (
 	"sync"
 	"time"
 
-	xioutil "github.com/iamzoy/minio/internal/ioutil"
-	"github.com/iamzoy/minio/internal/mcontext"
+	xioutil "github.com/IamZoY/minio/internal/ioutil"
+	"github.com/IamZoY/minio/internal/mcontext"
 	"github.com/minio/pkg/v3/console"
 	"github.com/minio/pkg/v3/env"
 )

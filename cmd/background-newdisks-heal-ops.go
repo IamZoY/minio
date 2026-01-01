@@ -33,7 +33,7 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7/pkg/set"
-	"github.com/iamzoy/minio/internal/config"
+	"github.com/IamZoY/minio/internal/config"
 	"github.com/minio/pkg/v3/env"
 )
 

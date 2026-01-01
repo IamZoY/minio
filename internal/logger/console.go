@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"github.com/minio/madmin-go/v3/logger/log"
-	"github.com/iamzoy/minio/internal/color"
+	"github.com/IamZoY/minio/internal/color"
 )
 
 // ConsoleLoggerTgt is a stringified value to represent console logging

@@ -22,7 +22,7 @@ import (
 	"net/http"
 
 	consoleapi "github.com/IamZoY/console/api"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/minio/mux"
 	"github.com/minio/pkg/v3/wildcard"
 	"github.com/rs/cors"

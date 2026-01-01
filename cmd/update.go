@@ -36,8 +36,8 @@ import (
 	"time"
 
 	"github.com/klauspost/compress/zstd"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/env"
 	xnet "github.com/minio/pkg/v3/net"
 	"github.com/minio/selfupdate"
@@ -229,7 +229,7 @@ func IsPCFTile() bool {
 //	MinIO (<OS>; <ARCH>[; <MODE>][; dcos][; kubernetes][; docker][; source]) MinIO/<VERSION> MinIO/<RELEASE-TAG> MinIO/<COMMIT-ID> [MinIO/universe-<PACKAGE-NAME>] [MinIO/helm-<HELM-VERSION>]
 //
 // Any change here should be discussed by opening an issue at
-// https://github.com/iamzoy/minio/issues.
+// https://github.com/IamZoY/minio/issues.
 func getUserAgent(mode string) string {
 	userAgentParts := []string{}
 	// Helper function to concisely append a pair of strings to a

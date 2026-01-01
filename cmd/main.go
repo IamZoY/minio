@@ -30,8 +30,8 @@ import (
 	"time"
 
 	"github.com/minio/cli"
-	"github.com/iamzoy/minio/internal/color"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/color"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/console"
 	"github.com/minio/pkg/v3/env"
 	"github.com/minio/pkg/v3/trie"

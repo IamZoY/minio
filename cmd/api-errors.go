@@ -29,25 +29,25 @@ import (
 	"strings"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
-	"github.com/iamzoy/minio/internal/ioutil"
+	"github.com/IamZoY/minio/internal/ioutil"
 	"google.golang.org/api/googleapi"
 
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/tags"
-	"github.com/iamzoy/minio/internal/auth"
-	"github.com/iamzoy/minio/internal/bucket/lifecycle"
-	"github.com/iamzoy/minio/internal/bucket/replication"
-	"github.com/iamzoy/minio/internal/config/dns"
-	"github.com/iamzoy/minio/internal/crypto"
-	"github.com/iamzoy/minio/internal/kms"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/bucket/lifecycle"
+	"github.com/IamZoY/minio/internal/bucket/replication"
+	"github.com/IamZoY/minio/internal/config/dns"
+	"github.com/IamZoY/minio/internal/crypto"
+	"github.com/IamZoY/minio/internal/kms"
+	"github.com/IamZoY/minio/internal/logger"
 
-	objectlock "github.com/iamzoy/minio/internal/bucket/object/lock"
-	"github.com/iamzoy/minio/internal/bucket/versioning"
-	levent "github.com/iamzoy/minio/internal/config/lambda/event"
-	"github.com/iamzoy/minio/internal/event"
-	"github.com/iamzoy/minio/internal/hash"
+	objectlock "github.com/IamZoY/minio/internal/bucket/object/lock"
+	"github.com/IamZoY/minio/internal/bucket/versioning"
+	levent "github.com/IamZoY/minio/internal/config/lambda/event"
+	"github.com/IamZoY/minio/internal/event"
+	"github.com/IamZoY/minio/internal/hash"
 	"github.com/minio/pkg/v3/policy"
 )
 
@@ -281,7 +281,7 @@ const (
 	ErrInvalidStorageClass
 	ErrBackendDown
 	// Add new extended error codes here.
-	// Please open a https://github.com/iamzoy/minio/issues before adding
+	// Please open a https://github.com/IamZoY/minio/issues before adding
 	// new error codes here.
 
 	ErrMalformedJSON

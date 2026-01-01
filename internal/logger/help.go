@@ -18,7 +18,7 @@
 package logger
 
 import (
-	"github.com/iamzoy/minio/internal/config"
+	"github.com/IamZoY/minio/internal/config"
 )
 
 // Help template for logger http and audit

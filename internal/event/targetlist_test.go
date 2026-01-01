@@ -24,7 +24,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/iamzoy/minio/internal/store"
+	"github.com/IamZoY/minio/internal/store"
 )
 
 type ExampleTarget struct {

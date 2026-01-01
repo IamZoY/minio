@@ -27,7 +27,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/iamzoy/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/auth"
 	"github.com/minio/pkg/v3/policy"
 )
 

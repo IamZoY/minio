@@ -20,7 +20,7 @@ package cmd
 import (
 	"context"
 
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/logger"
 )
 
 const (

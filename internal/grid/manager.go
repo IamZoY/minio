@@ -32,8 +32,8 @@ import (
 	"github.com/gobwas/ws/wsutil"
 	"github.com/google/uuid"
 	"github.com/minio/madmin-go/v3"
-	"github.com/iamzoy/minio/internal/deadlineconn"
-	"github.com/iamzoy/minio/internal/pubsub"
+	"github.com/IamZoY/minio/internal/deadlineconn"
+	"github.com/IamZoY/minio/internal/pubsub"
 	"github.com/minio/mux"
 )
 

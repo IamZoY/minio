@@ -27,10 +27,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/iamzoy/minio/internal/auth"
-	"github.com/iamzoy/minio/internal/hash/sha256"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/hash/sha256"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/policy"
 )
 

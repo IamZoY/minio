@@ -21,9 +21,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/iamzoy/minio/internal/auth"
-	"github.com/iamzoy/minio/internal/logger"
-	"github.com/iamzoy/minio/internal/mcontext"
+	"github.com/IamZoY/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/mcontext"
 	"github.com/minio/pkg/v3/policy"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/expfmt"

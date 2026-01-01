@@ -24,9 +24,9 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/iamzoy/minio/internal/bpool"
-	"github.com/iamzoy/minio/internal/s3select/jstream"
-	"github.com/iamzoy/minio/internal/s3select/sql"
+	"github.com/IamZoY/minio/internal/bpool"
+	"github.com/IamZoY/minio/internal/s3select/jstream"
+	"github.com/IamZoY/minio/internal/s3select/sql"
 )
 
 // PReader - JSON record reader for S3Select.

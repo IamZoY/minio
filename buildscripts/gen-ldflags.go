@@ -33,13 +33,13 @@ func genLDFlags(version string) string {
 	releaseTag, date := releaseTag(version)
 	copyrightYear := strconv.Itoa(date.Year())
 	ldflagsStr := "-s -w"
-	ldflagsStr += " -X github.com/iamzoy/minio/cmd.Version=" + version
-	ldflagsStr += " -X github.com/iamzoy/minio/cmd.CopyrightYear=" + copyrightYear
-	ldflagsStr += " -X github.com/iamzoy/minio/cmd.ReleaseTag=" + releaseTag
-	ldflagsStr += " -X github.com/iamzoy/minio/cmd.CommitID=" + commitID()
-	ldflagsStr += " -X github.com/iamzoy/minio/cmd.ShortCommitID=" + commitID()[:12]
-	ldflagsStr += " -X github.com/iamzoy/minio/cmd.GOPATH=" + os.Getenv("GOPATH")
-	ldflagsStr += " -X github.com/iamzoy/minio/cmd.GOROOT=" + os.Getenv("GOROOT")
+	ldflagsStr += " -X github.com/IamZoY/minio/cmd.Version=" + version
+	ldflagsStr += " -X github.com/IamZoY/minio/cmd.CopyrightYear=" + copyrightYear
+	ldflagsStr += " -X github.com/IamZoY/minio/cmd.ReleaseTag=" + releaseTag
+	ldflagsStr += " -X github.com/IamZoY/minio/cmd.CommitID=" + commitID()
+	ldflagsStr += " -X github.com/IamZoY/minio/cmd.ShortCommitID=" + commitID()[:12]
+	ldflagsStr += " -X github.com/IamZoY/minio/cmd.GOPATH=" + os.Getenv("GOPATH")
+	ldflagsStr += " -X github.com/IamZoY/minio/cmd.GOROOT=" + os.Getenv("GOROOT")
 	return ldflagsStr
 }
 

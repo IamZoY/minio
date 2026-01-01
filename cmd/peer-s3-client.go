@@ -28,7 +28,7 @@ import (
 	"time"
 
 	"github.com/minio/madmin-go/v3"
-	"github.com/iamzoy/minio/internal/grid"
+	"github.com/IamZoY/minio/internal/grid"
 	"github.com/minio/pkg/v3/sync/errgroup"
 )
 

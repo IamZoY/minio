@@ -51,11 +51,11 @@ import (
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/set"
-	"github.com/iamzoy/minio/internal/auth"
-	"github.com/iamzoy/minio/internal/color"
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/kms"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/color"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/kms"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/certs"
 	"github.com/minio/pkg/v3/console"
 	"github.com/minio/pkg/v3/env"
@@ -82,7 +82,7 @@ func init() {
 		if mousetrap.StartedByExplorer() {
 			fmt.Printf("Don't double-click %s\n", os.Args[0])
 			fmt.Println("You need to open cmd.exe/PowerShell and run it from the command line")
-			fmt.Println("Refer to the docs here on how to run it as a Windows Service https://github.com/iamzoy/minio-service/tree/master/windows")
+			fmt.Println("Refer to the docs here on how to run it as a Windows Service https://github.com/IamZoY/minio-service/tree/master/windows")
 			fmt.Println("Press the Enter Key to Exit")
 			fmt.Scanln()
 			os.Exit(1)

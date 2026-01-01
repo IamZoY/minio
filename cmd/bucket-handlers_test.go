@@ -27,7 +27,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/iamzoy/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/auth"
 )
 
 // Wrapper for calling RemoveBucket HTTP handler tests for both Erasure multiple disks and single node setup.

@@ -22,7 +22,7 @@ import (
 	"testing"
 	"time"
 
-	xhttp "github.com/iamzoy/minio/internal/http"
+	xhttp "github.com/IamZoY/minio/internal/http"
 )
 
 // Test redactLDAPPwd()

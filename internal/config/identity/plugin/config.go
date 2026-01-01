@@ -31,9 +31,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/iamzoy/minio/internal/arn"
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/arn"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/env"
 	xnet "github.com/minio/pkg/v3/net"
 )

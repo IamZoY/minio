@@ -21,9 +21,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/iamzoy/minio/internal/dsync"
-	"github.com/iamzoy/minio/internal/grid"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/dsync"
+	"github.com/IamZoY/minio/internal/grid"
+	"github.com/IamZoY/minio/internal/logger"
 )
 
 // To abstract a node over network.

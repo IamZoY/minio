@@ -28,9 +28,9 @@ import (
 	"testing"
 
 	"github.com/dustin/go-humanize"
-	"github.com/iamzoy/minio/internal/config/storageclass"
-	"github.com/iamzoy/minio/internal/hash"
-	"github.com/iamzoy/minio/internal/ioutil"
+	"github.com/IamZoY/minio/internal/config/storageclass"
+	"github.com/IamZoY/minio/internal/hash"
+	"github.com/IamZoY/minio/internal/ioutil"
 )
 
 // Wrapper for calling NewMultipartUpload tests for both Erasure multiple disks and single node setup.

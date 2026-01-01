@@ -23,7 +23,7 @@ import (
 	"reflect"
 	"testing"
 
-	xhttp "github.com/iamzoy/minio/internal/http"
+	xhttp "github.com/IamZoY/minio/internal/http"
 )
 
 // TestGetAndValidateAttributesOpts is currently minimal and covers a subset of getAndValidateAttributesOpts(),

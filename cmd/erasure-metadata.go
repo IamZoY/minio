@@ -25,12 +25,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/iamzoy/minio/internal/amztime"
-	"github.com/iamzoy/minio/internal/bucket/lifecycle"
-	"github.com/iamzoy/minio/internal/bucket/replication"
-	"github.com/iamzoy/minio/internal/crypto"
-	"github.com/iamzoy/minio/internal/hash/sha256"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	"github.com/IamZoY/minio/internal/amztime"
+	"github.com/IamZoY/minio/internal/bucket/lifecycle"
+	"github.com/IamZoY/minio/internal/bucket/replication"
+	"github.com/IamZoY/minio/internal/crypto"
+	"github.com/IamZoY/minio/internal/hash/sha256"
+	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/minio/pkg/v3/sync/errgroup"
 )
 

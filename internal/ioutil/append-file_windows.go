@@ -21,7 +21,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/iamzoy/minio/internal/lock"
+	"github.com/IamZoY/minio/internal/lock"
 )
 
 // AppendFile - appends the file "src" to the file "dst"

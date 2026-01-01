@@ -24,7 +24,7 @@ import (
 	"github.com/IBM/sarama"
 	"github.com/xdg/scram"
 
-	"github.com/iamzoy/minio/internal/hash/sha256"
+	"github.com/IamZoY/minio/internal/hash/sha256"
 )
 
 func initScramClient(cfg Config, config *sarama.Config) {

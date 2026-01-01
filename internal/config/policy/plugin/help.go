@@ -17,7 +17,7 @@
 
 package plugin
 
-import "github.com/iamzoy/minio/internal/config"
+import "github.com/IamZoY/minio/internal/config"
 
 // Help template for Access Management Plugin policy feature.
 var (

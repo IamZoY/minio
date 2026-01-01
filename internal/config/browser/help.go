@@ -17,7 +17,7 @@
 
 package browser
 
-import "github.com/iamzoy/minio/internal/config"
+import "github.com/IamZoY/minio/internal/config"
 
 // Help template for browser feature.
 var (

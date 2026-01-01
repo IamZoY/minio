@@ -23,9 +23,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/iamzoy/minio/internal/logger/target/http"
-	"github.com/iamzoy/minio/internal/logger/target/kafka"
-	types "github.com/iamzoy/minio/internal/logger/target/loggertypes"
+	"github.com/IamZoY/minio/internal/logger/target/http"
+	"github.com/IamZoY/minio/internal/logger/target/kafka"
+	types "github.com/IamZoY/minio/internal/logger/target/loggertypes"
 )
 
 // Target is the entity that we will receive

@@ -35,7 +35,7 @@ import (
 	"os"
 
 	cr "github.com/minio/minio-go/v7/pkg/credentials"
-	cmd "github.com/iamzoy/minio/cmd"
+	cmd "github.com/IamZoY/minio/cmd"
 )
 
 func main() {

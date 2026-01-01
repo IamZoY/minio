@@ -24,8 +24,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/iamzoy/minio/internal/config"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	"github.com/IamZoY/minio/internal/config"
+	xhttp "github.com/IamZoY/minio/internal/http"
 	xnet "github.com/minio/pkg/v3/net"
 	"github.com/minio/pkg/v3/policy"
 )

@@ -24,7 +24,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/iamzoy/minio/internal/config"
+	"github.com/IamZoY/minio/internal/config"
 	"github.com/minio/pkg/v3/env"
 	xnet "github.com/minio/pkg/v3/net"
 )

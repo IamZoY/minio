@@ -18,7 +18,7 @@
 package ldap
 
 import (
-	"github.com/iamzoy/minio/internal/config"
+	"github.com/IamZoY/minio/internal/config"
 )
 
 // LegacyConfig contains AD/LDAP server connectivity information from old config

@@ -30,9 +30,9 @@ import (
 	"time"
 
 	"github.com/minio/minio-go/v7/pkg/tags"
-	"github.com/iamzoy/minio/internal/bucket/versioning"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	xioutil "github.com/iamzoy/minio/internal/ioutil"
+	"github.com/IamZoY/minio/internal/bucket/versioning"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	xioutil "github.com/IamZoY/minio/internal/ioutil"
 	"github.com/minio/pkg/v3/env"
 	"github.com/minio/pkg/v3/wildcard"
 	"github.com/minio/pkg/v3/workers"

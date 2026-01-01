@@ -25,8 +25,8 @@ import (
 	"net/url"
 	"time"
 
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/rest"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/rest"
 )
 
 // ReconnectRESTClient is a wrapper type for rest.Client which provides reconnect on first failure.

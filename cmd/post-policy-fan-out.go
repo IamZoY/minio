@@ -25,10 +25,10 @@ import (
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/tags"
-	"github.com/iamzoy/minio/internal/crypto"
-	"github.com/iamzoy/minio/internal/hash"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/kms"
+	"github.com/IamZoY/minio/internal/crypto"
+	"github.com/IamZoY/minio/internal/hash"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/kms"
 )
 
 type fanOutOptions struct {

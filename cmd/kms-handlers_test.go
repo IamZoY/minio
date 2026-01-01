@@ -27,7 +27,7 @@ import (
 	"testing"
 
 	"github.com/minio/madmin-go/v3"
-	"github.com/iamzoy/minio/internal/kms"
+	"github.com/IamZoY/minio/internal/kms"
 	"github.com/minio/pkg/v3/policy"
 )
 

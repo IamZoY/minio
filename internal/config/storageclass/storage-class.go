@@ -26,8 +26,8 @@ import (
 	"sync"
 
 	"github.com/dustin/go-humanize"
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/env"
 )
 

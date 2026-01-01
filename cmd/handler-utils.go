@@ -28,11 +28,11 @@ import (
 	"sync/atomic"
 
 	"github.com/minio/madmin-go/v3"
-	"github.com/iamzoy/minio/internal/auth"
-	"github.com/iamzoy/minio/internal/handlers"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
-	"github.com/iamzoy/minio/internal/mcontext"
+	"github.com/IamZoY/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/handlers"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/mcontext"
 	xnet "github.com/minio/pkg/v3/net"
 )
 
@@ -397,7 +397,7 @@ func errorResponseHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		return
 	}
-	desc := "Do not upgrade one server at a time - please follow the recommended guidelines mentioned here https://github.com/iamzoy/minio#upgrading-minio for your environment"
+	desc := "Do not upgrade one server at a time - please follow the recommended guidelines mentioned here https://github.com/IamZoY/minio#upgrading-minio for your environment"
 	switch {
 	case strings.HasPrefix(r.URL.Path, peerRESTPrefix):
 		writeErrorResponseString(r.Context(), w, APIError{

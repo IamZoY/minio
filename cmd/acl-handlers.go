@@ -22,8 +22,8 @@ import (
 	"io"
 	"net/http"
 
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/mux"
 	"github.com/minio/pkg/v3/policy"
 )

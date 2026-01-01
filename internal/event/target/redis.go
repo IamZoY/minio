@@ -29,10 +29,10 @@ import (
 	"time"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/iamzoy/minio/internal/event"
-	"github.com/iamzoy/minio/internal/logger"
-	"github.com/iamzoy/minio/internal/once"
-	"github.com/iamzoy/minio/internal/store"
+	"github.com/IamZoY/minio/internal/event"
+	"github.com/IamZoY/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/once"
+	"github.com/IamZoY/minio/internal/store"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

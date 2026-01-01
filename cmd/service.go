@@ -24,7 +24,7 @@ import (
 	"runtime"
 	"syscall"
 
-	xioutil "github.com/iamzoy/minio/internal/ioutil"
+	xioutil "github.com/IamZoY/minio/internal/ioutil"
 )
 
 // Type of service signals currently supported.

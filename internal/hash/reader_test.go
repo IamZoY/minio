@@ -25,7 +25,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/iamzoy/minio/internal/ioutil"
+	"github.com/IamZoY/minio/internal/ioutil"
 )
 
 // Tests functions like Size(), MD5*(), SHA256*()

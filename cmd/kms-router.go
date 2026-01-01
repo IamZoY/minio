@@ -22,7 +22,7 @@ import (
 
 	"github.com/klauspost/compress/gzhttp"
 	"github.com/klauspost/compress/gzip"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/mux"
 )
 

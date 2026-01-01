@@ -33,9 +33,9 @@ import (
 	"testing"
 
 	"github.com/klauspost/compress/s2"
-	"github.com/iamzoy/minio/internal/auth"
-	"github.com/iamzoy/minio/internal/config/compress"
-	"github.com/iamzoy/minio/internal/crypto"
+	"github.com/IamZoY/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/config/compress"
+	"github.com/IamZoY/minio/internal/crypto"
 	"github.com/minio/pkg/v3/trie"
 )
 

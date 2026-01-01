@@ -28,7 +28,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/iamzoy/minio/internal/bucket/lifecycle"
+	"github.com/IamZoY/minio/internal/bucket/lifecycle"
 )
 
 func TestListObjectsVersionedFolders(t *testing.T) {

@@ -20,7 +20,7 @@ package cmd
 import (
 	"testing"
 
-	"github.com/iamzoy/minio/internal/bucket/replication"
+	"github.com/IamZoY/minio/internal/bucket/replication"
 )
 
 var replicatedInfosTests = []struct {

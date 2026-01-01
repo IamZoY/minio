@@ -28,8 +28,8 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/minio/minio-go/v7/pkg/set"
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/kms"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/kms"
 	"github.com/puzpuzpuz/xsync/v3"
 	"go.etcd.io/etcd/api/v3/mvccpb"
 	etcd "go.etcd.io/etcd/client/v3"

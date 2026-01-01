@@ -21,7 +21,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/iamzoy/minio/internal/dsync"
+	"github.com/IamZoY/minio/internal/dsync"
 )
 
 // Tests lock rpc client.

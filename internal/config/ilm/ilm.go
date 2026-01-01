@@ -20,7 +20,7 @@ package ilm
 import (
 	"strconv"
 
-	"github.com/iamzoy/minio/internal/config"
+	"github.com/IamZoY/minio/internal/config"
 	"github.com/minio/pkg/v3/env"
 )
 

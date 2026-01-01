@@ -23,7 +23,7 @@ package disk_test
 import (
 	"testing"
 
-	"github.com/iamzoy/minio/internal/disk"
+	"github.com/IamZoY/minio/internal/disk"
 )
 
 func TestFree(t *testing.T) {

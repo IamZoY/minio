@@ -28,7 +28,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 	jsoniter "github.com/json-iterator/go"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	xhttp "github.com/IamZoY/minio/internal/http"
 )
 
 func TestIsXLMetaFormatValid(t *testing.T) {

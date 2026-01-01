@@ -17,7 +17,7 @@
 
 package lambda
 
-import "github.com/iamzoy/minio/internal/event/target"
+import "github.com/IamZoY/minio/internal/event/target"
 
 // Config - lambda target configuration structure, holds
 // information about various lambda targets.

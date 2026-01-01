@@ -26,7 +26,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/iamzoy/minio/internal/deadlineconn"
+	"github.com/IamZoY/minio/internal/deadlineconn"
 	"golang.org/x/sys/unix"
 )
 

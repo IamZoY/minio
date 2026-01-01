@@ -23,10 +23,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/config/lambda/event"
-	"github.com/iamzoy/minio/internal/config/lambda/target"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/config/lambda/event"
+	"github.com/IamZoY/minio/internal/config/lambda/target"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/env"
 	xnet "github.com/minio/pkg/v3/net"
 )

@@ -28,7 +28,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/iamzoy/minio/internal/cachevalue"
+	"github.com/IamZoY/minio/internal/cachevalue"
 )
 
 type usageTestFile struct {

@@ -18,15 +18,15 @@
 package cmd
 
 import (
-	"github.com/iamzoy/minio/internal/auth"
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/config/compress"
-	xldap "github.com/iamzoy/minio/internal/config/identity/ldap"
-	"github.com/iamzoy/minio/internal/config/identity/openid"
-	"github.com/iamzoy/minio/internal/config/notify"
-	"github.com/iamzoy/minio/internal/config/policy/opa"
-	"github.com/iamzoy/minio/internal/config/storageclass"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/config/compress"
+	xldap "github.com/IamZoY/minio/internal/config/identity/ldap"
+	"github.com/IamZoY/minio/internal/config/identity/openid"
+	"github.com/IamZoY/minio/internal/config/notify"
+	"github.com/IamZoY/minio/internal/config/policy/opa"
+	"github.com/IamZoY/minio/internal/config/storageclass"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/quick"
 )
 

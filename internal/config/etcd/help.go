@@ -17,7 +17,7 @@
 
 package etcd
 
-import "github.com/iamzoy/minio/internal/config"
+import "github.com/IamZoY/minio/internal/config"
 
 // etcd config documented in default config
 var (

@@ -29,9 +29,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/iamzoy/minio/internal/config/lambda/event"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/config/lambda/event"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/certs"
 	xnet "github.com/minio/pkg/v3/net"
 )

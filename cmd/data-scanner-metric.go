@@ -25,7 +25,7 @@ import (
 	"unsafe"
 
 	"github.com/minio/madmin-go/v3"
-	"github.com/iamzoy/minio/internal/bucket/lifecycle"
+	"github.com/IamZoY/minio/internal/bucket/lifecycle"
 )
 
 //go:generate stringer -type=scannerMetric -trimprefix=scannerMetric $GOFILE

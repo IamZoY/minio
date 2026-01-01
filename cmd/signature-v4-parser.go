@@ -23,8 +23,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/iamzoy/minio/internal/auth"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	"github.com/IamZoY/minio/internal/auth"
+	xhttp "github.com/IamZoY/minio/internal/http"
 )
 
 // credentialHeader data type represents structured form of Credential

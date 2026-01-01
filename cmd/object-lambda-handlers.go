@@ -34,11 +34,11 @@ import (
 	"github.com/minio/mux"
 	"github.com/minio/pkg/v3/policy"
 
-	"github.com/iamzoy/minio/internal/auth"
-	levent "github.com/iamzoy/minio/internal/config/lambda/event"
-	"github.com/iamzoy/minio/internal/hash/sha256"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/auth"
+	levent "github.com/IamZoY/minio/internal/config/lambda/event"
+	"github.com/IamZoY/minio/internal/hash/sha256"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
 )
 
 var getLambdaEventData = func(bucket, object string, cred auth.Credentials, r *http.Request) (levent.Event, error) {

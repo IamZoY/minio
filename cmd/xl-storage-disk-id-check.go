@@ -32,10 +32,10 @@ import (
 	"time"
 
 	"github.com/minio/madmin-go/v3"
-	"github.com/iamzoy/minio/internal/cachevalue"
-	"github.com/iamzoy/minio/internal/grid"
-	xioutil "github.com/iamzoy/minio/internal/ioutil"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/cachevalue"
+	"github.com/IamZoY/minio/internal/grid"
+	xioutil "github.com/IamZoY/minio/internal/ioutil"
+	"github.com/IamZoY/minio/internal/logger"
 )
 
 //go:generate stringer -type=storageMetric -trimprefix=storageMetric $GOFILE

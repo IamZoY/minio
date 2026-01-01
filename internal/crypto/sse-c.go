@@ -24,8 +24,8 @@ import (
 	"encoding/base64"
 	"net/http"
 
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
 )
 
 type ssec struct{}

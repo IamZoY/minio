@@ -26,7 +26,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/console"
 )
 

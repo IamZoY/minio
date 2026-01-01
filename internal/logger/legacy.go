@@ -18,8 +18,8 @@
 package logger
 
 import (
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/logger/target/http"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/logger/target/http"
 )
 
 // Legacy envs

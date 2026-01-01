@@ -31,10 +31,10 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/minio/madmin-go/v3"
-	"github.com/iamzoy/minio/internal/config"
-	xioutil "github.com/iamzoy/minio/internal/ioutil"
-	"github.com/iamzoy/minio/internal/kms"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/config"
+	xioutil "github.com/IamZoY/minio/internal/ioutil"
+	"github.com/IamZoY/minio/internal/kms"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/sync/errgroup"
 	"github.com/puzpuzpuz/xsync/v3"
 )

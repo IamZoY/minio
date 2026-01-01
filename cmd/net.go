@@ -26,8 +26,8 @@ import (
 	"strings"
 
 	"github.com/minio/minio-go/v7/pkg/set"
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/logger"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

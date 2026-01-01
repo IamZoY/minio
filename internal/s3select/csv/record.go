@@ -26,8 +26,8 @@ import (
 	"strings"
 
 	csv "github.com/minio/csvparser"
-	"github.com/iamzoy/minio/internal/s3select/jstream"
-	"github.com/iamzoy/minio/internal/s3select/sql"
+	"github.com/IamZoY/minio/internal/s3select/jstream"
+	"github.com/IamZoY/minio/internal/s3select/sql"
 )
 
 // Record - is a CSV record.

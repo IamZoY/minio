@@ -25,7 +25,7 @@ import (
 	"strings"
 
 	"github.com/minio/madmin-go/v3"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	xhttp "github.com/IamZoY/minio/internal/http"
 )
 
 // WarmBackendGetOpts is used to express byte ranges within an object. The zero

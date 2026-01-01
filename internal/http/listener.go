@@ -25,7 +25,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/iamzoy/minio/internal/deadlineconn"
+	"github.com/IamZoY/minio/internal/deadlineconn"
 )
 
 type acceptResult struct {

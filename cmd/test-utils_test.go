@@ -60,11 +60,11 @@ import (
 
 	"github.com/minio/minio-go/v7/pkg/s3utils"
 	"github.com/minio/minio-go/v7/pkg/signer"
-	"github.com/iamzoy/minio/internal/auth"
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/crypto"
-	"github.com/iamzoy/minio/internal/hash"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/crypto"
+	"github.com/IamZoY/minio/internal/hash"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/mux"
 	"github.com/minio/pkg/v3/policy"
 )
@@ -726,7 +726,7 @@ func newTestStreamingRequest(method, urlStr string, dataLength, chunkSize int64,
 
 	if body == nil {
 		// this is added to avoid panic during io.ReadAll(req.Body).
-		// th stack trace can be found here  https://github.com/iamzoy/minio/pull/2074 .
+		// th stack trace can be found here  https://github.com/IamZoY/minio/pull/2074 .
 		// This is very similar to https://github.com/golang/go/issues/7527.
 		req.Body = io.NopCloser(bytes.NewReader([]byte("")))
 	}

@@ -38,7 +38,7 @@ import (
 	jwtgo "github.com/golang-jwt/jwt/v4"
 	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/minio/minio-go/v7/pkg/signer"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/minio/pkg/v3/policy"
 )
 

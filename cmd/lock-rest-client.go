@@ -21,8 +21,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/iamzoy/minio/internal/dsync"
-	"github.com/iamzoy/minio/internal/grid"
+	"github.com/IamZoY/minio/internal/dsync"
+	"github.com/IamZoY/minio/internal/grid"
 )
 
 // lockRESTClient is authenticable lock REST client

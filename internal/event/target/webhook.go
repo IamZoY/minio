@@ -33,11 +33,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/iamzoy/minio/internal/event"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
-	"github.com/iamzoy/minio/internal/once"
-	"github.com/iamzoy/minio/internal/store"
+	"github.com/IamZoY/minio/internal/event"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/once"
+	"github.com/IamZoY/minio/internal/store"
 	"github.com/minio/pkg/v3/certs"
 	xnet "github.com/minio/pkg/v3/net"
 )

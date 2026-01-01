@@ -29,10 +29,10 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	miniogopolicy "github.com/minio/minio-go/v7/pkg/policy"
 	"github.com/minio/minio-go/v7/pkg/tags"
-	"github.com/iamzoy/minio/internal/auth"
-	"github.com/iamzoy/minio/internal/handlers"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/logger"
+	"github.com/IamZoY/minio/internal/auth"
+	"github.com/IamZoY/minio/internal/handlers"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/policy"
 )
 

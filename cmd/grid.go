@@ -22,10 +22,10 @@ import (
 	"crypto/tls"
 	"sync/atomic"
 
-	"github.com/iamzoy/minio/internal/crypto"
-	"github.com/iamzoy/minio/internal/grid"
-	xhttp "github.com/iamzoy/minio/internal/http"
-	"github.com/iamzoy/minio/internal/rest"
+	"github.com/IamZoY/minio/internal/crypto"
+	"github.com/IamZoY/minio/internal/grid"
+	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/IamZoY/minio/internal/rest"
 )
 
 // globalGrid is the global grid manager.

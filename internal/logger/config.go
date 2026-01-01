@@ -29,9 +29,9 @@ import (
 	"github.com/minio/pkg/v3/env"
 	xnet "github.com/minio/pkg/v3/net"
 
-	"github.com/iamzoy/minio/internal/config"
-	"github.com/iamzoy/minio/internal/logger/target/http"
-	"github.com/iamzoy/minio/internal/logger/target/kafka"
+	"github.com/IamZoY/minio/internal/config"
+	"github.com/IamZoY/minio/internal/logger/target/http"
+	"github.com/IamZoY/minio/internal/logger/target/kafka"
 )
 
 // Console logger target

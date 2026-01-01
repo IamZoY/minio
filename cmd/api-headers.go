@@ -30,8 +30,8 @@ import (
 	"time"
 
 	"github.com/minio/minio-go/v7/pkg/tags"
-	"github.com/iamzoy/minio/internal/crypto"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	"github.com/IamZoY/minio/internal/crypto"
+	xhttp "github.com/IamZoY/minio/internal/http"
 	xxml "github.com/minio/xxml"
 )
 

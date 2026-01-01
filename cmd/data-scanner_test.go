@@ -27,12 +27,12 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/iamzoy/minio/internal/amztime"
-	"github.com/iamzoy/minio/internal/bucket/lifecycle"
-	objectlock "github.com/iamzoy/minio/internal/bucket/object/lock"
-	"github.com/iamzoy/minio/internal/bucket/replication"
-	"github.com/iamzoy/minio/internal/bucket/versioning"
-	xhttp "github.com/iamzoy/minio/internal/http"
+	"github.com/IamZoY/minio/internal/amztime"
+	"github.com/IamZoY/minio/internal/bucket/lifecycle"
+	objectlock "github.com/IamZoY/minio/internal/bucket/object/lock"
+	"github.com/IamZoY/minio/internal/bucket/replication"
+	"github.com/IamZoY/minio/internal/bucket/versioning"
+	xhttp "github.com/IamZoY/minio/internal/http"
 )
 
 func TestApplyNewerNoncurrentVersionsLimit(t *testing.T) {
