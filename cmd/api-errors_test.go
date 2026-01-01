@@ -21,8 +21,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/minio/minio/internal/crypto"
-	"github.com/minio/minio/internal/hash"
+	"github.com/iamzoy/minio/internal/crypto"
+	"github.com/iamzoy/minio/internal/hash"
 )
 
 var toAPIErrorTests = []struct {

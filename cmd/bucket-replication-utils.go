@@ -31,9 +31,9 @@ import (
 	"time"
 
 	"github.com/minio/madmin-go/v3"
-	"github.com/minio/minio/internal/bucket/replication"
-	"github.com/minio/minio/internal/crypto"
-	xhttp "github.com/minio/minio/internal/http"
+	"github.com/iamzoy/minio/internal/bucket/replication"
+	"github.com/iamzoy/minio/internal/crypto"
+	xhttp "github.com/iamzoy/minio/internal/http"
 )
 
 //go:generate msgp -file=$GOFILE
