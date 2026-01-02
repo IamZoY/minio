@@ -113,7 +113,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo ""
         echo "🏷️  Creating and pushing tag: $RELEASE_TAG"
         git tag -s "$RELEASE_TAG" -m "Release $RELEASE_TAG"
-        git push origin master
+        git push origin event-notifications
         git push origin "$RELEASE_TAG"
         echo "✅ Tag pushed to remote"
         echo ""

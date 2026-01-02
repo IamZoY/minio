@@ -26,6 +26,7 @@ import (
 	"sync"
 
 	"github.com/IamZoY/minio/internal/config/browser"
+	"github.com/IamZoY/minio/internal/config/eventtag"
 
 	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/config"
@@ -78,6 +79,7 @@ func initHelp() {
 		config.ILMSubSys:            ilm.DefaultKVS,
 		config.BatchSubSys:          batch.DefaultKVS,
 		config.BrowserSubSys:        browser.DefaultKVS,
+		config.EventTagSubSys:       eventtag.DefaultKVS,
 	}
 	maps.Copy(kvs, notify.DefaultNotificationKVS)
 	maps.Copy(kvs, lambda.DefaultLambdaKVS)
@@ -230,6 +232,11 @@ func initHelp() {
 			Description: "manage ILM settings for expiration and transition workers",
 			Optional:    true,
 		},
+		config.HelpKV{
+			Key:         config.EventTagSubSys,
+			Description: "enable automatic tagging of objects based on event delivery status",
+			Optional:    true,
+		},
 	}
 
 	if globalIsErasure {
@@ -278,6 +285,7 @@ func initHelp() {
 		config.DriveSubSys:          drive.HelpDrive,
 		config.BrowserSubSys:        browser.Help,
 		config.ILMSubSys:            ilm.Help,
+		config.EventTagSubSys:       eventtag.Help,
 	}
 
 	config.RegisterHelpSubSys(helpMap)
@@ -412,6 +420,10 @@ func validateSubSysConfig(ctx context.Context, s config.Config, subSys string, o
 		}
 	case config.BrowserSubSys:
 		if _, err := browser.LookupConfig(s[config.BrowserSubSys][config.Default]); err != nil {
+			return err
+		}
+	case config.EventTagSubSys:
+		if _, err := eventtag.LookupConfig(s[config.EventTagSubSys][config.Default]); err != nil {
 			return err
 		}
 	default:
@@ -697,6 +709,22 @@ func applyDynamicConfigForSubSys(ctx context.Context, objAPI ObjectLayer, s conf
 			errs = append(errs, fmt.Errorf("Unable to apply browser config: %w", err))
 		} else {
 			globalBrowserConfig.Update(browserCfg)
+		}
+	case config.EventTagSubSys:
+		eventTagCfg, err := eventtag.LookupConfig(s[config.EventTagSubSys][config.Default])
+		if err != nil {
+			errs = append(errs, fmt.Errorf("Unable to apply event tag config: %w", err))
+		} else {
+			wasEnabled := globalEventTagConfig.IsEnabled()
+			globalEventTagConfig.Update(eventTagCfg)
+			isEnabled := eventTagCfg.IsEnabled()
+			if isEnabled != wasEnabled {
+				if isEnabled {
+					logger.Info("Event tagging enabled - objects will be tagged with EventSent status")
+				} else {
+					logger.Info("Event tagging disabled")
+				}
+			}
 		}
 	case config.ILMSubSys:
 		ilmCfg, err := ilm.LookupConfig(s[config.ILMSubSys][config.Default])

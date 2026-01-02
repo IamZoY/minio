@@ -34,6 +34,7 @@ import (
 	"github.com/IamZoY/minio/internal/bucket/bandwidth"
 	"github.com/IamZoY/minio/internal/config"
 	"github.com/IamZoY/minio/internal/config/browser"
+	"github.com/IamZoY/minio/internal/config/eventtag"
 	"github.com/IamZoY/minio/internal/grid"
 	"github.com/IamZoY/minio/internal/handlers"
 	"github.com/IamZoY/minio/internal/kms"
@@ -200,6 +201,9 @@ var (
 
 	// globalBrowserConfig Browser user configurable settings
 	globalBrowserConfig browser.Config
+
+	// globalEventTagConfig holds event tagging configuration
+	globalEventTagConfig eventtag.Config
 
 	// This flag is set to 'true' when MINIO_UPDATE env is set to 'off'. Default is false.
 	globalInplaceUpdateDisabled = false
