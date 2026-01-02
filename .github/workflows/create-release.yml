@@ -1,0 +1,41 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag name (e.g., RELEASE.2026-01-02T10-00-00Z)'
+        required: true
+        type: string
+      commit_sha:
+        description: 'Commit SHA to tag (default: HEAD)'
+        required: false
+        type: string
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          name: ${{ github.event.inputs.tag }}
+          target_commitish: ${{ github.event.inputs.commit_sha || github.sha }}
+          body: |
+            Release ${{ github.event.inputs.tag }}
+            
+            - Built with custom console from github.com/IamZoY/console
+            - Docker build configured for amd64 only
+            - All module paths updated to use IamZoY/console
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
