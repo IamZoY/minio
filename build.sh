@@ -12,22 +12,55 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "📦 Step 1: Updating console to latest from IamZoY/console..."
+# Get current console version
+CURRENT_CONSOLE=$(grep "IamZoY/console" go.mod | awk '{print $2}')
+echo "Current console: $CURRENT_CONSOLE"
+
 # Get latest commit from local console directory if available
+LATEST_COMMIT=""
 if [ -d "../console" ]; then
     LATEST_COMMIT=$(cd ../console && git rev-parse HEAD 2>/dev/null)
     if [ -n "$LATEST_COMMIT" ]; then
         echo "Found local console commit: ${LATEST_COMMIT:0:12}"
         echo "Updating to: github.com/IamZoY/console@$LATEST_COMMIT"
-        go get github.com/IamZoY/console@$LATEST_COMMIT 2>&1 | grep -E "downloading|upgraded|updated|go:" | tail -3 || true
+        # Temporarily disable exit on error for go get
+        set +e
+        go get github.com/IamZoY/console@$LATEST_COMMIT 2>&1
+        UPDATE_RESULT=$?
+        set -e
+        if [ $UPDATE_RESULT -eq 0 ]; then
+            echo "✅ Console updated successfully"
+        else
+            echo "⚠️  Direct commit update failed, generating pseudo-version..."
+            # Generate pseudo-version manually
+            COMMIT_TIME=$(cd ../console && git log -1 --format=%ct $LATEST_COMMIT 2>/dev/null)
+            if [ -n "$COMMIT_TIME" ]; then
+                DATE=$(TZ=UTC date -d "@$COMMIT_TIME" +"%Y%m%d%H%M%S" 2>/dev/null || TZ=UTC date -r "$COMMIT_TIME" +"%Y%m%d%H%M%S" 2>/dev/null || echo "20260102")
+                PSEUDO_VERSION="v0.0.0-${DATE}-${LATEST_COMMIT:0:12}"
+                sed -i "s|github.com/IamZoY/console v0.0.0-[0-9]*-[a-f0-9]*|github.com/IamZoY/console $PSEUDO_VERSION|" go.mod
+                echo "✅ Updated go.mod to use: $PSEUDO_VERSION"
+            fi
+        fi
     else
         echo "⚠️  Could not get local console commit, trying master branch..."
-        go get github.com/IamZoY/console@master 2>&1 | grep -E "downloading|upgraded|updated|go:" | tail -3 || true
+        set +e
+        go get github.com/IamZoY/console@master 2>&1 | tail -5
+        set -e
     fi
 else
     echo "Local console directory not found, trying master branch..."
-    go get github.com/IamZoY/console@master 2>&1 | grep -E "downloading|upgraded|updated|go:" | tail -3 || true
+    set +e
+    go get github.com/IamZoY/console@master 2>&1 | tail -5
+    set -e
 fi
-echo "✅ Console dependency update completed"
+
+# Show updated version
+NEW_CONSOLE=$(grep "IamZoY/console" go.mod | awk '{print $2}')
+if [ "$CURRENT_CONSOLE" != "$NEW_CONSOLE" ]; then
+    echo "✅ Console updated: $CURRENT_CONSOLE → $NEW_CONSOLE"
+else
+    echo "ℹ️  Console already at latest version: $NEW_CONSOLE"
+fi
 echo ""
 
 echo "📦 Step 2: Running go mod tidy..."

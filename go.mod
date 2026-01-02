@@ -15,7 +15,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.12.0
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.1
 	github.com/IBM/sarama v1.45.1
-	github.com/IamZoY/console v0.0.0-20260102133213-cc913dabb48e
+	github.com/IamZoY/console v0.0.0-20260102135529-711c5da6d1cb
 	github.com/alecthomas/participle v0.7.1
 	github.com/beevik/ntp v1.4.3
 	github.com/buger/jsonparser v1.1.1
