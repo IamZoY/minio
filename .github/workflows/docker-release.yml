@@ -58,7 +58,14 @@ jobs:
           echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           echo "SHORT_COMMIT_ID=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Build and push Docker image (amd64 only)
+      - name: Set up Docker Buildx with attestations
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
+            network=host
+
+      - name: Build and push Docker image (amd64 only) with attestations
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -74,3 +81,12 @@ jobs:
             RELEASE_TAG=${{ steps.get_tag.outputs.TAG }}
             COMMIT_ID=${{ steps.git_info.outputs.COMMIT_ID }}
             SHORT_COMMIT_ID=${{ steps.git_info.outputs.SHORT_COMMIT_ID }}
+          provenance: mode=max
+          sbom: true
+          attestations: |
+            - type=sbom
+              format=cyclonedx
+            - type=provenance
+              mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
