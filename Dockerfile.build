@@ -1,0 +1,41 @@
+# Dockerfile to build MinIO from source with custom console from github.com/IamZoY/console
+FROM golang:1.24-alpine AS build
+
+ARG TARGETARCH=amd64
+ARG TARGETOS=linux
+
+ENV CGO_ENABLED=0
+ENV GOOS=${TARGETOS}
+ENV GOARCH=${TARGETARCH}
+
+WORKDIR /build
+
+# Install build dependencies
+RUN apk add --no-cache git make bash
+
+# Copy go mod files first for better caching
+COPY go.mod go.sum ./
+
+# Download dependencies (this will fetch console from github.com/IamZoY/console)
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Generate LDFLAGS and build MinIO
+RUN LDFLAGS=$(go run buildscripts/gen-ldflags.go) && \
+    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -tags kqueue -trimpath --ldflags "${LDFLAGS}" -o minio
+
+# Final stage
+FROM alpine:latest
+
+RUN apk add --no-cache ca-certificates curl
+
+# Copy the built binary
+COPY --from=build /build/minio /usr/bin/minio
+RUN chmod +x /usr/bin/minio
+
+EXPOSE 9000 9001
+
+ENTRYPOINT ["/usr/bin/minio"]
