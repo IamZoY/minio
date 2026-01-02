@@ -42,8 +42,10 @@ RUN if [ -d .git ]; then \
     fi
 
 # Generate LDFLAGS and build MinIO
-# Use the RELEASE_TAG as version, gen-ldflags.go will parse it
-RUN LDFLAGS=$(go run buildscripts/gen-ldflags.go "${RELEASE_TAG}") && \
+# Strip "RELEASE." prefix from tag before passing to gen-ldflags.go
+# gen-ldflags.go expects format: 2026-01-02T07-45-14Z (not RELEASE.2026-01-02T07-45-14Z)
+RUN VERSION="${RELEASE_TAG#RELEASE.}" && \
+    LDFLAGS=$(go run buildscripts/gen-ldflags.go "${VERSION}") && \
     CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build -tags kqueue -trimpath --ldflags "${LDFLAGS}" -o minio
 
