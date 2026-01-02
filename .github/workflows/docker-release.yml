@@ -46,23 +46,59 @@ jobs:
             echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG="${{ steps.get_tag.outputs.TAG }}"
+          echo "VERSION=${TAG#RELEASE.}" >> $GITHUB_OUTPUT
+
       - name: Get git commit info
         id: git_info
         run: |
           echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           echo "SHORT_COMMIT_ID=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Build and push multi-arch Docker image
+      - name: Build and push Docker image (amd64)
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile.build
           push: true
-          platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/iamzoy/minio:${{ steps.get_tag.outputs.TAG }}
             ghcr.io/iamzoy/minio:latest
+          platforms: linux/amd64
           build-args: |
+            TARGETARCH=amd64
+            TARGETOS=linux
             RELEASE_TAG=${{ steps.get_tag.outputs.TAG }}
             COMMIT_ID=${{ steps.git_info.outputs.COMMIT_ID }}
             SHORT_COMMIT_ID=${{ steps.git_info.outputs.SHORT_COMMIT_ID }}
+
+      - name: Build and push Docker image (arm64)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.build
+          push: true
+          tags: |
+            ghcr.io/iamzoy/minio:${{ steps.get_tag.outputs.TAG }}-arm64
+          platforms: linux/arm64
+          build-args: |
+            TARGETARCH=arm64
+            TARGETOS=linux
+            RELEASE_TAG=${{ steps.get_tag.outputs.TAG }}
+            COMMIT_ID=${{ steps.git_info.outputs.COMMIT_ID }}
+            SHORT_COMMIT_ID=${{ steps.git_info.outputs.SHORT_COMMIT_ID }}
+
+      - name: Create manifest and push multi-arch image
+        run: |
+          docker manifest create ghcr.io/iamzoy/minio:${{ steps.get_tag.outputs.TAG }} \
+            --amend ghcr.io/iamzoy/minio:${{ steps.get_tag.outputs.TAG }} \
+            --amend ghcr.io/iamzoy/minio:${{ steps.get_tag.outputs.TAG }}-arm64
+          docker manifest push ghcr.io/iamzoy/minio:${{ steps.get_tag.outputs.TAG }}
+          
+          docker manifest create ghcr.io/iamzoy/minio:latest \
+            --amend ghcr.io/iamzoy/minio:${{ steps.get_tag.outputs.TAG }} \
+            --amend ghcr.io/iamzoy/minio:${{ steps.get_tag.outputs.TAG }}-arm64
+          docker manifest push ghcr.io/iamzoy/minio:latest
