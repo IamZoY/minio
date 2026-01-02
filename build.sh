@@ -11,12 +11,31 @@ echo ""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-echo "📦 Step 1: Running go mod tidy..."
+echo "📦 Step 1: Updating console to latest from IamZoY/console..."
+# Get latest commit from local console directory if available
+if [ -d "../console" ]; then
+    LATEST_COMMIT=$(cd ../console && git rev-parse HEAD 2>/dev/null)
+    if [ -n "$LATEST_COMMIT" ]; then
+        echo "Found local console commit: ${LATEST_COMMIT:0:12}"
+        echo "Updating to: github.com/IamZoY/console@$LATEST_COMMIT"
+        go get github.com/IamZoY/console@$LATEST_COMMIT 2>&1 | grep -E "downloading|upgraded|updated|go:" | tail -3 || true
+    else
+        echo "⚠️  Could not get local console commit, trying master branch..."
+        go get github.com/IamZoY/console@master 2>&1 | grep -E "downloading|upgraded|updated|go:" | tail -3 || true
+    fi
+else
+    echo "Local console directory not found, trying master branch..."
+    go get github.com/IamZoY/console@master 2>&1 | grep -E "downloading|upgraded|updated|go:" | tail -3 || true
+fi
+echo "✅ Console dependency update completed"
+echo ""
+
+echo "📦 Step 2: Running go mod tidy..."
 go mod tidy
 echo "✅ Go dependencies updated"
 echo ""
 
-echo "🔨 Step 2: Building MinIO..."
+echo "🔨 Step 3: Building MinIO..."
 # Check if 'build' target exists, otherwise use default target
 if make -n build &>/dev/null; then
     make build
