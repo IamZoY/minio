@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,11 +35,11 @@ jobs:
           git config --global tag.gpgsign true
 
       - name: Create signed tag
-        if: github.event_name == 'workflow_dispatch'
         run: |
           TAG="${{ github.event.inputs.tag }}"
           COMMIT_SHA="${{ github.event.inputs.commit_sha || github.sha }}"
-          git tag -s "$TAG" -m "Release $TAG" "$COMMIT_SHA"
+          git checkout "$COMMIT_SHA"
+          git tag -s "$TAG" -m "Release $TAG"
           git push origin "$TAG"
 
       - name: Create Release
