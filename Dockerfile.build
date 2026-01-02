@@ -23,20 +23,23 @@ COPY go.mod go.sum ./
 # Download dependencies (this will fetch console from github.com/IamZoY/console)
 RUN go mod download
 
-# Copy source code
+# Copy source code (including .git from checkout)
 COPY . .
 
-# Initialize git repository for gen-ldflags.go (it needs git to work)
-# Create a fake commit with the actual commit ID so gen-ldflags.go can find it
-RUN git init && \
-    git config user.email "build@minio.io" && \
-    git config user.name "MinIO Build" && \
-    git add -A && \
-    git commit -m "Build commit" --allow-empty && \
-    if [ -n "${COMMIT_ID}" ]; then \
-      git update-ref refs/heads/master "${COMMIT_ID}" 2>/dev/null || true; \
-    fi && \
-    git tag -a "${RELEASE_TAG}" -m "Release ${RELEASE_TAG}" HEAD 2>/dev/null || true
+# Ensure git is configured and tag exists for gen-ldflags.go
+# gen-ldflags.go needs git to get commit information
+RUN if [ -d .git ]; then \
+      git config user.email "build@minio.io" || true; \
+      git config user.name "MinIO Build" || true; \
+      git tag -a "${RELEASE_TAG}" -m "Release ${RELEASE_TAG}" HEAD 2>/dev/null || true; \
+    else \
+      git init && \
+      git config user.email "build@minio.io" && \
+      git config user.name "MinIO Build" && \
+      git add -A && \
+      git commit -m "Build commit" --allow-empty && \
+      git tag -a "${RELEASE_TAG}" -m "Release ${RELEASE_TAG}" HEAD 2>/dev/null || true; \
+    fi
 
 # Generate LDFLAGS and build MinIO
 # Use the RELEASE_TAG as version, gen-ldflags.go will parse it
