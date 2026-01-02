@@ -28,9 +28,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/IamZoY/minio/internal/auth"
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7/pkg/set"
-	"github.com/IamZoY/minio/internal/auth"
 	"github.com/minio/pkg/v3/env"
 )
 
@@ -123,6 +123,7 @@ const (
 	BatchSubSys          = madmin.BatchSubSys
 	BrowserSubSys        = madmin.BrowserSubSys
 	ILMSubSys            = madmin.ILMSubsys
+	EventTagSubSys       = "event_tag"
 
 	// Add new constants here (similar to above) if you add new fields to config.
 )
@@ -175,7 +176,14 @@ var LoggerSubSystems = set.CreateStringSet(
 )
 
 // SubSystems - all supported sub-systems
-var SubSystems = madmin.SubSystems
+// Extend madmin.SubSystems with custom subsystems
+var SubSystems = func() set.StringSet {
+	// Start with all subsystems from madmin
+	allSubSystems := madmin.SubSystems.ToSlice()
+	// Add custom subsystems
+	allSubSystems = append(allSubSystems, EventTagSubSys)
+	return set.CreateStringSet(allSubSystems...)
+}()
 
 // SubSystemsDynamic - all sub-systems that have dynamic config.
 var SubSystemsDynamic = set.CreateStringSet(
@@ -193,6 +201,7 @@ var SubSystemsDynamic = set.CreateStringSet(
 	ILMSubSys,
 	BatchSubSys,
 	BrowserSubSys,
+	EventTagSubSys,
 )
 
 // SubSystemsSingleTargets - subsystems which only support single target.
@@ -216,6 +225,7 @@ var SubSystemsSingleTargets = set.CreateStringSet(
 	ILMSubSys,
 	BatchSubSys,
 	BrowserSubSys,
+	EventTagSubSys,
 )
 
 // Constant separators

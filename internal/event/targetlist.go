@@ -21,6 +21,7 @@ import (
 	"context"
 	"fmt"
 	"maps"
+	"net/url"
 	"runtime"
 	"sync"
 	"sync/atomic"
@@ -29,6 +30,32 @@ import (
 	"github.com/IamZoY/minio/internal/store"
 	"github.com/minio/pkg/v3/workers"
 )
+
+// ObjectTaggingFunc is a function type for applying object tags.
+// This allows the event package to call ObjectLayer methods without direct dependency.
+// It should merge new tags with existing tags.
+type ObjectTaggingFunc func(ctx context.Context, bucket, object string, newTagKey, newTagValue string) error
+
+// EventTagConfigFunc is a function type for getting event tag config.
+// This allows the event package to check if event tagging is enabled.
+type EventTagConfigFunc func() bool
+
+var (
+	objectTaggingFn  ObjectTaggingFunc
+	eventTagConfigFn EventTagConfigFunc
+)
+
+// SetObjectTaggingFunc sets the function to use for object tagging.
+// This should be called from cmd package during initialization.
+func SetObjectTaggingFunc(fn ObjectTaggingFunc) {
+	objectTaggingFn = fn
+}
+
+// SetEventTagConfigFunc sets the function to get event tag config.
+// This should be called from cmd package during initialization.
+func SetEventTagConfigFunc(fn EventTagConfigFunc) {
+	eventTagConfigFn = fn
+}
 
 const (
 	logSubsys = "notify"
@@ -282,12 +309,21 @@ func (list *TargetList) sendSync(event Event, targetIDset TargetIDSet) {
 			defer list.currentSendCalls.Add(-1)
 			defer wg.Done()
 
-			if err := target.Save(event); err != nil {
+			var eventSent bool
+			err := target.Save(event)
+			if err != nil {
 				list.eventsErrorsTotal.Add(1)
 				list.incFailedEvents(id)
 				reqInfo := &logger.ReqInfo{}
 				reqInfo.AppendTags("targetID", id.String())
 				logger.LogOnceIf(logger.SetReqInfo(context.Background(), reqInfo), logSubsys, err, id.String())
+			} else {
+				eventSent = true
+			}
+
+			// Apply event tagging if enabled
+			if eventTagConfigFn != nil && eventTagConfigFn() && objectTaggingFn != nil {
+				applyEventTagging(event, eventSent)
 			}
 		}(id, target)
 	}
@@ -393,4 +429,56 @@ func NewTargetList(ctx context.Context) *TargetList {
 		ctx:         ctx,
 	}
 	return list
+}
+
+// isObjectCreatedEvent checks if the event is an ObjectCreated event
+func isObjectCreatedEvent(eventName Name) bool {
+	objectCreatedEvents := []Name{
+		ObjectCreatedCompleteMultipartUpload,
+		ObjectCreatedCopy,
+		ObjectCreatedPost,
+		ObjectCreatedPut,
+		ObjectCreatedPutRetention,
+		ObjectCreatedPutLegalHold,
+		ObjectCreatedPutTagging,
+		ObjectCreatedDeleteTagging,
+	}
+	for _, e := range objectCreatedEvents {
+		if eventName == e {
+			return true
+		}
+	}
+	return false
+}
+
+// applyEventTagging applies tags to objects based on event delivery status
+func applyEventTagging(event Event, eventSent bool) {
+	// Only tag ObjectCreated events
+	if !isObjectCreatedEvent(event.EventName) {
+		return
+	}
+
+	// Decode object name
+	objectName, err := url.QueryUnescape(event.S3.Object.Key)
+	if err != nil {
+		logger.LogOnceIf(context.Background(), logSubsys, fmt.Errorf("Error decoding object key: %w", err), event.S3.Object.Key)
+		return
+	}
+
+	// Determine tag value based on event send status
+	tagValue := "Success"
+	if !eventSent {
+		tagValue = "Failed"
+	}
+
+	// Apply tags asynchronously
+	ctx := context.Background()
+	bucket := event.S3.Bucket.Name
+
+	logger.Info("Event tagging: Tagging object %s/%s with EventSent=%s (event: %s)", bucket, objectName, tagValue, event.EventName)
+	go func() {
+		if err := objectTaggingFn(ctx, bucket, objectName, "EventSent", tagValue); err != nil {
+			logger.LogOnceIf(ctx, logSubsys, fmt.Errorf("Error applying object tag: %w", err), event.S3.Object.Key)
+		}
+	}()
 }
