@@ -3,10 +3,14 @@ FROM golang:1.24-alpine AS build
 
 ARG TARGETARCH=amd64
 ARG TARGETOS=linux
+ARG RELEASE_TAG
+ARG COMMIT_ID
+ARG SHORT_COMMIT_ID
 
 ENV CGO_ENABLED=0
 ENV GOOS=${TARGETOS}
 ENV GOARCH=${TARGETARCH}
+ENV MINIO_RELEASE=${RELEASE_TAG}
 
 WORKDIR /build
 
@@ -22,8 +26,21 @@ RUN go mod download
 # Copy source code
 COPY . .
 
+# Initialize git repository for gen-ldflags.go (it needs git to work)
+# Create a fake commit with the actual commit ID so gen-ldflags.go can find it
+RUN git init && \
+    git config user.email "build@minio.io" && \
+    git config user.name "MinIO Build" && \
+    git add -A && \
+    git commit -m "Build commit" --allow-empty && \
+    if [ -n "${COMMIT_ID}" ]; then \
+      git update-ref refs/heads/master "${COMMIT_ID}" 2>/dev/null || true; \
+    fi && \
+    git tag -a "${RELEASE_TAG}" -m "Release ${RELEASE_TAG}" HEAD 2>/dev/null || true
+
 # Generate LDFLAGS and build MinIO
-RUN LDFLAGS=$(go run buildscripts/gen-ldflags.go) && \
+# Use the RELEASE_TAG as version, gen-ldflags.go will parse it
+RUN LDFLAGS=$(go run buildscripts/gen-ldflags.go "${RELEASE_TAG}") && \
     CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build -tags kqueue -trimpath --ldflags "${LDFLAGS}" -o minio
 
