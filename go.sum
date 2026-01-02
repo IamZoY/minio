@@ -59,8 +59,8 @@ github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapp
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.51.0/go.mod h1:otE2jQekW/PqXk1Awf5lmfokJx4uwuqcj1ab5SpGeW0=
 github.com/IBM/sarama v1.45.1 h1:nY30XqYpqyXOXSNoe2XCgjj9jklGM1Ye94ierUb1jQ0=
 github.com/IBM/sarama v1.45.1/go.mod h1:qifDhA3VWSrQ1TjSMyxDl3nYL3oX2C83u+G6L79sq4w=
-github.com/IamZoY/console v0.0.0-20260102135529-711c5da6d1cb h1:/tRe7r30LYVojP0kuEU8EGxHd9F7OaCAMlc7xwu0pig=
-github.com/IamZoY/console v0.0.0-20260102135529-711c5da6d1cb/go.mod h1:icXbfLfAZRARGtiu8u5TAppRf3kbCH22lbKLir5YsXM=
+github.com/IamZoY/console v0.0.0-20260102174146-56a38c7299cf h1:kymcsQHaakfUkKy8oZLsYzKe5QFeWaYW0OB5AXjNhD8=
+github.com/IamZoY/console v0.0.0-20260102174146-56a38c7299cf/go.mod h1:icXbfLfAZRARGtiu8u5TAppRf3kbCH22lbKLir5YsXM=
 github.com/VividCortex/ewma v1.2.0 h1:f58SaIzcDXrSy3kWaHNvuJgJ3Nmz59Zji6XoJR/q1ow=
 github.com/VividCortex/ewma v1.2.0/go.mod h1:nz4BbCtbLyFDeC9SUHbtcT5644juEuWfUAUnGx7j5l4=
 github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d h1:licZJFw2RwpHMqeKTCYkitsPqHNxTmd4SNR5r94FGM8=
