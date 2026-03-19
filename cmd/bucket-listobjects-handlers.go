@@ -19,6 +19,7 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"strings"
@@ -322,4 +323,123 @@ func (api objectAPIHandlers) ListObjectsV1Handler(w http.ResponseWriter, r *http
 
 	// Write success response.
 	writeSuccessResponseXML(w, encodeResponseList(response))
+}
+
+// ListObjectsByTagResponse is the JSON response for the list-by-tag endpoint.
+type ListObjectsByTagResponse struct {
+	Objects         []TaggedObjectInfo `json:"objects"`
+	IsTruncated     bool               `json:"isTruncated"`
+	NextMarker      string             `json:"nextMarker,omitempty"`
+	TotalMatchCount int                `json:"totalMatchCount"`
+}
+
+// TaggedObjectInfo represents an object entry in the tag index response.
+type TaggedObjectInfo struct {
+	Key      string `json:"key"`
+	TagValue string `json:"tagValue"`
+}
+
+// ListObjectsByTagHandler - GET Bucket (List Objects By Tag)
+// Returns objects that match a specific tag key/value from the event tag index.
+func (api objectAPIHandlers) ListObjectsByTagHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := newContext(r, w, "ListObjectsByTag")
+	defer logger.AuditLog(ctx, w, r, mustGetClaimsFromToken(r))
+
+	vars := mux.Vars(r)
+	bucket := vars["bucket"]
+
+	objectAPI := api.ObjectAPI()
+	if objectAPI == nil {
+		writeErrorResponse(ctx, w, errorCodes.ToAPIErr(ErrServerNotInitialized), r.URL)
+		return
+	}
+
+	if s3Error := checkRequestAuthType(ctx, r, policy.ListBucketAction, bucket, ""); s3Error != ErrNone {
+		writeErrorResponse(ctx, w, errorCodes.ToAPIErr(s3Error), r.URL)
+		return
+	}
+
+	urlValues := r.Form
+	tagKey := urlValues.Get("tag-key")
+	tagValue := urlValues.Get("tag-value")
+	marker := urlValues.Get("marker")
+	maxKeysStr := urlValues.Get("max-keys")
+
+	if tagKey == "" || tagValue == "" {
+		writeErrorResponse(ctx, w, errorCodes.ToAPIErr(ErrInvalidQueryParams), r.URL)
+		return
+	}
+
+	maxKeys := 1000
+	if maxKeysStr != "" {
+		var err error
+		maxKeys, err = strconv.Atoi(maxKeysStr)
+		if err != nil || maxKeys < 0 || maxKeys > 10000 {
+			writeErrorResponse(ctx, w, errorCodes.ToAPIErr(ErrInvalidMaxKeys), r.URL)
+			return
+		}
+	}
+
+	allObjects := QueryTagIndex(bucket, tagKey, tagValue)
+	if allObjects == nil {
+		allObjects = []string{}
+	}
+
+	totalCount := len(allObjects)
+
+	// Apply marker-based pagination
+	startIdx := 0
+	if marker != "" {
+		for i, name := range allObjects {
+			if name == marker {
+				startIdx = i + 1
+				break
+			}
+		}
+	}
+
+	isTruncated := false
+	endIdx := startIdx + maxKeys
+	if endIdx > len(allObjects) {
+		endIdx = len(allObjects)
+	} else if endIdx < len(allObjects) {
+		isTruncated = true
+	}
+
+	pageObjects := allObjects[startIdx:endIdx]
+
+	// Validate objects still exist (remove stale entries)
+	validObjects := make([]TaggedObjectInfo, 0, len(pageObjects))
+	for _, objName := range pageObjects {
+		_, err := objectAPI.GetObjectInfo(ctx, bucket, objName, ObjectOptions{})
+		if err != nil {
+			continue
+		}
+		validObjects = append(validObjects, TaggedObjectInfo{
+			Key:      objName,
+			TagValue: tagValue,
+		})
+	}
+
+	nextMarker := ""
+	if isTruncated && len(pageObjects) > 0 {
+		nextMarker = pageObjects[len(pageObjects)-1]
+	}
+
+	resp := ListObjectsByTagResponse{
+		Objects:         validObjects,
+		IsTruncated:     isTruncated,
+		NextMarker:      nextMarker,
+		TotalMatchCount: totalCount,
+	}
+
+	data, err := json.Marshal(resp)
+	if err != nil {
+		writeErrorResponse(ctx, w, toAPIError(ctx, err), r.URL)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }

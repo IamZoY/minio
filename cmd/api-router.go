@@ -501,6 +501,10 @@ func registerAPIRouter(router *mux.Router) {
 			HandlerFunc(s3APIMiddleware(api.DeleteBucketTaggingHandler)).
 			Queries("tagging", "")
 
+		// ListObjectsByTag
+		router.Methods(http.MethodGet).
+			HandlerFunc(s3APIMiddleware(api.ListObjectsByTagHandler)).
+			Queries("list-by-tag", "")
 		// ListMultipartUploads
 		router.Methods(http.MethodGet).
 			HandlerFunc(s3APIMiddleware(api.ListMultipartUploadsHandler)).
