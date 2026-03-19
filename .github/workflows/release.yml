@@ -3,11 +3,11 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'RELEASE.*'
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag name for the release (e.g., v2026.03.19)'
+        description: 'Tag name for the release (e.g., RELEASE.2026-03-19T17-00-00Z)'
         required: true
         type: string
 
@@ -103,7 +103,7 @@ jobs:
           name: MinIO ${{ steps.get_tag.outputs.TAG }}
           body_path: release_notes.md
           draft: false
-          prerelease: ${{ contains(steps.get_tag.outputs.TAG, '-') }}
+          prerelease: false
           files: |
             minio-linux-amd64
             minio-linux-arm64
