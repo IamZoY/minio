@@ -36,14 +36,14 @@ import (
 // It should merge new tags with existing tags.
 type ObjectTaggingFunc func(ctx context.Context, bucket, object string, newTagKey, newTagValue string) error
 
-// EventTagConfigFunc is a function type for getting event tag config.
+// TagConfigFunc is a function type for getting event tag config.
 // This allows the event package to check if event tagging is enabled.
-type EventTagConfigFunc func() bool
+type TagConfigFunc func() bool
 
 var (
 	tagFnMu          sync.RWMutex
 	objectTaggingFn  ObjectTaggingFunc
-	eventTagConfigFn EventTagConfigFunc
+	eventTagConfigFn TagConfigFunc
 )
 
 // SetObjectTaggingFunc sets the function to use for object tagging.
@@ -60,13 +60,13 @@ func getObjectTaggingFunc() ObjectTaggingFunc {
 }
 
 // SetEventTagConfigFunc sets the function to get event tag config.
-func SetEventTagConfigFunc(fn EventTagConfigFunc) {
+func SetEventTagConfigFunc(fn TagConfigFunc) {
 	tagFnMu.Lock()
 	defer tagFnMu.Unlock()
 	eventTagConfigFn = fn
 }
 
-func getEventTagConfigFunc() EventTagConfigFunc {
+func getEventTagConfigFunc() TagConfigFunc {
 	tagFnMu.RLock()
 	defer tagFnMu.RUnlock()
 	return eventTagConfigFn
