@@ -24,7 +24,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/minio/pkg/v3/wildcard"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 //go:generate msgp -file $GOFILE
