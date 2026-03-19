@@ -59,7 +59,7 @@ require (
 	github.com/minio/madmin-go/v3 v3.0.110
 	github.com/minio/minio-go/v7 v7.0.97
 	github.com/minio/mux v1.9.2
-	github.com/minio/pkg/v3 v3.6.0
+	github.com/minio/pkg/v3 v3.6.1
 	github.com/minio/selfupdate v0.6.0
 	github.com/minio/simdjson-go v0.4.5
 	github.com/minio/sio v0.4.1
@@ -94,6 +94,7 @@ require (
 	go.etcd.io/etcd/client/v3 v3.6.7
 	go.uber.org/atomic v1.11.0
 	go.uber.org/zap v1.27.1
+	go.yaml.in/yaml/v3 v3.0.4
 	goftp.io/server/v2 v2.0.1
 	golang.org/x/crypto v0.46.0
 	golang.org/x/oauth2 v0.34.0
@@ -103,7 +104,6 @@ require (
 	golang.org/x/time v0.13.0
 	google.golang.org/api v0.252.0
 	gopkg.in/yaml.v2 v2.4.0
-	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -279,7 +279,6 @@ require (
 	go.opentelemetry.io/otel/trace v1.40.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
-	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/mod v0.30.0 // indirect
 	golang.org/x/net v0.48.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
@@ -289,4 +288,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251213004720-97cd9d5aeac2 // indirect
 	google.golang.org/grpc v1.77.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

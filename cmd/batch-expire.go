@@ -37,7 +37,7 @@ import (
 	"github.com/minio/pkg/v3/wildcard"
 	"github.com/minio/pkg/v3/workers"
 	"github.com/minio/pkg/v3/xtime"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 // expire: # Expire objects that match a condition

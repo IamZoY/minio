@@ -52,7 +52,7 @@ import (
 	"github.com/minio/pkg/v3/env"
 	"github.com/minio/pkg/v3/policy"
 	"github.com/minio/pkg/v3/workers"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 var globalBatchConfig batch.Config
