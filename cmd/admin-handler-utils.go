@@ -23,10 +23,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/minio/kms-go/kes"
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/auth"
 	"github.com/IamZoY/minio/internal/config"
+	"github.com/minio/kms-go/kes"
+	"github.com/minio/madmin-go/v3"
 	"github.com/minio/pkg/v3/policy"
 )
 

@@ -23,12 +23,12 @@ import (
 	"maps"
 	"sync"
 
-	"github.com/minio/minio-go/v7"
-	"github.com/minio/minio-go/v7/pkg/tags"
 	"github.com/IamZoY/minio/internal/crypto"
 	"github.com/IamZoY/minio/internal/hash"
 	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/IamZoY/minio/internal/kms"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/tags"
 )
 
 type fanOutOptions struct {

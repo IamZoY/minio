@@ -28,9 +28,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/grid"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/madmin-go/v3"
 	"github.com/minio/pkg/v3/sync/errgroup"
 	"github.com/puzpuzpuz/xsync/v3"
 )

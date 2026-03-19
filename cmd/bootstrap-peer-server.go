@@ -31,9 +31,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/IamZoY/minio/internal/grid"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/minio/pkg/v3/env"
 )
 

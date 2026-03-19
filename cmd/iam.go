@@ -33,8 +33,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
-	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/IamZoY/minio/internal/arn"
 	"github.com/IamZoY/minio/internal/auth"
 	"github.com/IamZoY/minio/internal/color"
@@ -48,6 +46,8 @@ import (
 	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/IamZoY/minio/internal/jwt"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/madmin-go/v3"
+	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/minio/pkg/v3/env"
 	"github.com/minio/pkg/v3/ldap"
 	"github.com/minio/pkg/v3/policy"

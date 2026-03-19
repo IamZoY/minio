@@ -34,16 +34,16 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/dustin/go-humanize"
-	"github.com/klauspost/compress/zstd"
-	"github.com/minio/madmin-go/v3"
-	"github.com/minio/madmin-go/v3/logger/log"
 	"github.com/IamZoY/minio/internal/bucket/bandwidth"
 	"github.com/IamZoY/minio/internal/event"
 	"github.com/IamZoY/minio/internal/grid"
 	xioutil "github.com/IamZoY/minio/internal/ioutil"
 	"github.com/IamZoY/minio/internal/logger"
 	"github.com/IamZoY/minio/internal/pubsub"
+	"github.com/dustin/go-humanize"
+	"github.com/klauspost/compress/zstd"
+	"github.com/minio/madmin-go/v3"
+	"github.com/minio/madmin-go/v3/logger/log"
 	"github.com/minio/mux"
 )
 

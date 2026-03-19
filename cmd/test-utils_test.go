@@ -58,13 +58,13 @@ import (
 
 	"github.com/fatih/color"
 
-	"github.com/minio/minio-go/v7/pkg/s3utils"
-	"github.com/minio/minio-go/v7/pkg/signer"
 	"github.com/IamZoY/minio/internal/auth"
 	"github.com/IamZoY/minio/internal/config"
 	"github.com/IamZoY/minio/internal/crypto"
 	"github.com/IamZoY/minio/internal/hash"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/minio-go/v7/pkg/s3utils"
+	"github.com/minio/minio-go/v7/pkg/signer"
 	"github.com/minio/mux"
 	"github.com/minio/pkg/v3/policy"
 )

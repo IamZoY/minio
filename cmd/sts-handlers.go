@@ -31,12 +31,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/auth"
 	"github.com/IamZoY/minio/internal/config/identity/openid"
 	"github.com/IamZoY/minio/internal/hash/sha256"
 	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/madmin-go/v3"
 	"github.com/minio/mux"
 	"github.com/minio/pkg/v3/policy"
 	"github.com/minio/pkg/v3/wildcard"

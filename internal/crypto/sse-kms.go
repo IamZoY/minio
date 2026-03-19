@@ -25,10 +25,10 @@ import (
 	"path"
 	"strings"
 
-	jsoniter "github.com/json-iterator/go"
 	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/IamZoY/minio/internal/kms"
 	"github.com/IamZoY/minio/internal/logger"
+	jsoniter "github.com/json-iterator/go"
 )
 
 type ssekms struct{}

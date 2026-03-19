@@ -26,10 +26,10 @@ import (
 	"sync"
 	"time"
 
-	jsoniter "github.com/json-iterator/go"
-	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/IamZoY/minio/internal/config"
 	"github.com/IamZoY/minio/internal/kms"
+	jsoniter "github.com/json-iterator/go"
+	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/puzpuzpuz/xsync/v3"
 	"go.etcd.io/etcd/api/v3/mvccpb"
 	etcd "go.etcd.io/etcd/client/v3"

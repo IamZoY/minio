@@ -30,10 +30,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/IamZoY/minio/internal/config"
 	"github.com/dustin/go-humanize"
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7/pkg/set"
-	"github.com/IamZoY/minio/internal/config"
 	"github.com/minio/pkg/v3/env"
 )
 

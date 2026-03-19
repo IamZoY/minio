@@ -32,9 +32,6 @@ import (
 	"github.com/IamZoY/minio/internal/ioutil"
 	"google.golang.org/api/googleapi"
 
-	"github.com/minio/madmin-go/v3"
-	"github.com/minio/minio-go/v7"
-	"github.com/minio/minio-go/v7/pkg/tags"
 	"github.com/IamZoY/minio/internal/auth"
 	"github.com/IamZoY/minio/internal/bucket/lifecycle"
 	"github.com/IamZoY/minio/internal/bucket/replication"
@@ -42,6 +39,9 @@ import (
 	"github.com/IamZoY/minio/internal/crypto"
 	"github.com/IamZoY/minio/internal/kms"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/madmin-go/v3"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/tags"
 
 	objectlock "github.com/IamZoY/minio/internal/bucket/object/lock"
 	"github.com/IamZoY/minio/internal/bucket/versioning"

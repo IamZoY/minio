@@ -35,7 +35,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/minio/kms-go/kes"
 	"github.com/IamZoY/minio/internal/crypto"
 	"github.com/IamZoY/minio/internal/etag"
 	"github.com/IamZoY/minio/internal/hash"
@@ -43,6 +42,7 @@ import (
 	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/IamZoY/minio/internal/kms"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/kms-go/kes"
 	"github.com/minio/sio"
 )
 

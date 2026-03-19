@@ -26,12 +26,12 @@ import (
 	"os"
 	"sync"
 
-	"github.com/dustin/go-humanize"
 	"github.com/IamZoY/minio/internal/color"
 	"github.com/IamZoY/minio/internal/config"
 	"github.com/IamZoY/minio/internal/config/storageclass"
 	xioutil "github.com/IamZoY/minio/internal/ioutil"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/dustin/go-humanize"
 	"github.com/minio/pkg/v3/sync/errgroup"
 )
 

@@ -21,8 +21,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/auth"
+	"github.com/minio/madmin-go/v3"
 )
 
 // getUserWithProvider - returns the appropriate internal username based on the user provider.

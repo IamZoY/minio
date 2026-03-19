@@ -28,11 +28,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gomodule/redigo/redis"
 	"github.com/IamZoY/minio/internal/event"
 	"github.com/IamZoY/minio/internal/logger"
 	"github.com/IamZoY/minio/internal/once"
 	"github.com/IamZoY/minio/internal/store"
+	"github.com/gomodule/redigo/redis"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

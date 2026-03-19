@@ -31,11 +31,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/IamZoY/minio/internal/bucket/lifecycle"
 	"github.com/cespare/xxhash/v2"
 	"github.com/dustin/go-humanize"
 	"github.com/klauspost/compress/zstd"
 	"github.com/minio/madmin-go/v3"
-	"github.com/IamZoY/minio/internal/bucket/lifecycle"
 	"github.com/tinylib/msgp/msgp"
 	"github.com/valyala/bytebufferpool"
 )

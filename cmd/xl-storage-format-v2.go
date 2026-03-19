@@ -28,14 +28,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cespare/xxhash/v2"
-	"github.com/google/uuid"
-	jsoniter "github.com/json-iterator/go"
 	"github.com/IamZoY/minio/internal/bpool"
 	"github.com/IamZoY/minio/internal/bucket/lifecycle"
 	"github.com/IamZoY/minio/internal/bucket/replication"
 	"github.com/IamZoY/minio/internal/config/storageclass"
 	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/cespare/xxhash/v2"
+	"github.com/google/uuid"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/tinylib/msgp/msgp"
 )
 

@@ -25,13 +25,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/IamZoY/minio/internal/bucket/replication"
+	"github.com/IamZoY/minio/internal/crypto"
+	"github.com/IamZoY/minio/internal/kms"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"github.com/IamZoY/minio/internal/bucket/replication"
-	"github.com/IamZoY/minio/internal/crypto"
-	"github.com/IamZoY/minio/internal/kms"
 )
 
 const (

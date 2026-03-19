@@ -23,10 +23,10 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/IamZoY/minio/internal/hash"
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7/pkg/encrypt"
 	"github.com/minio/minio-go/v7/pkg/tags"
-	"github.com/IamZoY/minio/internal/hash"
 
 	"github.com/IamZoY/minio/internal/bucket/replication"
 	xioutil "github.com/IamZoY/minio/internal/ioutil"

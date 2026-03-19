@@ -30,10 +30,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/bucket/replication"
 	"github.com/IamZoY/minio/internal/crypto"
 	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/minio/madmin-go/v3"
 )
 
 //go:generate msgp -file=$GOFILE

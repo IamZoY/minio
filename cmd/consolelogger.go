@@ -24,12 +24,12 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/minio/madmin-go/v3"
-	"github.com/minio/madmin-go/v3/logger/log"
 	"github.com/IamZoY/minio/internal/logger"
 	"github.com/IamZoY/minio/internal/logger/target/console"
 	types "github.com/IamZoY/minio/internal/logger/target/loggertypes"
 	"github.com/IamZoY/minio/internal/pubsub"
+	"github.com/minio/madmin-go/v3"
+	"github.com/minio/madmin-go/v3/logger/log"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

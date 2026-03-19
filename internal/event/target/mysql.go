@@ -30,11 +30,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-sql-driver/mysql"
 	"github.com/IamZoY/minio/internal/event"
 	"github.com/IamZoY/minio/internal/logger"
 	"github.com/IamZoY/minio/internal/once"
 	"github.com/IamZoY/minio/internal/store"
+	"github.com/go-sql-driver/mysql"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

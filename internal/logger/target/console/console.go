@@ -24,9 +24,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/minio/madmin-go/v3/logger/log"
 	"github.com/IamZoY/minio/internal/color"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/madmin-go/v3/logger/log"
 )
 
 // Target implements loggerTarget to send log

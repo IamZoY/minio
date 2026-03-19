@@ -59,9 +59,9 @@ func newBucketTagIndex() *BucketTagIndex {
 
 // TagIndexManager manages tag indexes for all buckets.
 type TagIndexManager struct {
-	indexes   sync.Map   // bucket -> *BucketTagIndex
+	indexes   sync.Map // bucket -> *BucketTagIndex
 	updateCh  chan tagIndexUpdate
-	dirty     sync.Map   // bucket -> bool
+	dirty     sync.Map // bucket -> bool
 	flushMu   sync.Mutex
 	rebuildMu sync.Mutex // serializes rebuild vs live updates
 }
@@ -107,7 +107,10 @@ func QueryTagIndex(bucket, tagKey, tagValue string) []string {
 	if !ok {
 		return nil
 	}
-	idx := val.(*BucketTagIndex)
+	idx, ok2 := val.(*BucketTagIndex)
+	if !ok2 {
+		return nil
+	}
 	idx.mu.RLock()
 	defer idx.mu.RUnlock()
 
@@ -214,11 +217,16 @@ func RemoveBucketIndex(ctx context.Context, objAPI ObjectLayer, bucket string) {
 func (mgr *TagIndexManager) getOrCreateIndex(bucket string) *BucketTagIndex {
 	val, ok := mgr.indexes.Load(bucket)
 	if ok {
-		return val.(*BucketTagIndex)
+		if idx, ok2 := val.(*BucketTagIndex); ok2 {
+			return idx
+		}
 	}
 	idx := newBucketTagIndex()
 	actual, _ := mgr.indexes.LoadOrStore(bucket, idx)
-	return actual.(*BucketTagIndex)
+	if result, ok2 := actual.(*BucketTagIndex); ok2 {
+		return result
+	}
+	return idx
 }
 
 func (mgr *TagIndexManager) applyUpdate(update tagIndexUpdate) {
@@ -278,8 +286,14 @@ func (mgr *TagIndexManager) backgroundWorker(ctx context.Context, objAPI ObjectL
 
 func (mgr *TagIndexManager) flushAll(ctx context.Context, objAPI ObjectLayer) {
 	mgr.dirty.Range(func(key, value any) bool {
-		bucket := key.(string)
-		isDirty := value.(bool)
+		bucket, ok := key.(string)
+		if !ok {
+			return true
+		}
+		isDirty, ok := value.(bool)
+		if !ok {
+			return true
+		}
 		if isDirty {
 			mgr.flushBucket(ctx, objAPI, bucket)
 		}
@@ -292,7 +306,10 @@ func (mgr *TagIndexManager) flushBucket(ctx context.Context, objAPI ObjectLayer,
 	if !ok {
 		return
 	}
-	idx := val.(*BucketTagIndex)
+	idx, ok := val.(*BucketTagIndex)
+	if !ok {
+		return
+	}
 
 	// Serialize: tagKey -> tagValue -> []objectName
 	idx.mu.RLock()

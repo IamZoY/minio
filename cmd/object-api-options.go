@@ -25,11 +25,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
-	"github.com/minio/minio-go/v7/pkg/encrypt"
 	"github.com/IamZoY/minio/internal/crypto"
 	"github.com/IamZoY/minio/internal/hash"
 	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/google/uuid"
+	"github.com/minio/minio-go/v7/pkg/encrypt"
 )
 
 func getDefaultOpts(header http.Header, copySource bool, metadata map[string]string) (opts ObjectOptions, err error) {

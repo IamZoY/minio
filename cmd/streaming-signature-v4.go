@@ -31,10 +31,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dustin/go-humanize"
 	"github.com/IamZoY/minio/internal/auth"
 	"github.com/IamZoY/minio/internal/hash/sha256"
 	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/dustin/go-humanize"
 )
 
 // Streaming AWS Signature Version '4' constants.

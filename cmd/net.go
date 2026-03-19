@@ -25,9 +25,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/IamZoY/minio/internal/config"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/minio-go/v7/pkg/set"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

@@ -26,7 +26,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/config"
 	"github.com/IamZoY/minio/internal/config/etcd"
 	xldap "github.com/IamZoY/minio/internal/config/identity/ldap"
@@ -36,6 +35,7 @@ import (
 	"github.com/IamZoY/minio/internal/config/storageclass"
 	"github.com/IamZoY/minio/internal/config/subnet"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/madmin-go/v3"
 	"github.com/minio/mux"
 	"github.com/minio/pkg/v3/policy"
 )

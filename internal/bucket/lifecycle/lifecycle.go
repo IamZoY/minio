@@ -26,10 +26,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/IamZoY/minio/internal/bucket/object/lock"
 	"github.com/IamZoY/minio/internal/bucket/replication"
 	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/google/uuid"
 )
 
 var (

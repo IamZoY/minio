@@ -26,9 +26,9 @@ import (
 	"reflect"
 	"sync"
 
+	"github.com/IamZoY/minio/internal/logger"
 	"github.com/cespare/xxhash/v2"
 	"github.com/klauspost/reedsolomon"
-	"github.com/IamZoY/minio/internal/logger"
 )
 
 // Erasure - erasure encoding details.

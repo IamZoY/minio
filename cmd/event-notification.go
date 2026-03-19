@@ -113,9 +113,7 @@ func (evnot *EventNotifier) InitBucketTargets(ctx context.Context, objAPI Object
 // initEventTagging initializes the event tagging function pointers
 func initEventTagging(objAPI ObjectLayer) {
 	// Set function to check if event tagging is enabled
-	event.SetEventTagConfigFunc(func() bool {
-		return globalEventTagConfig.IsEnabled()
-	})
+	event.SetEventTagConfigFunc(globalEventTagConfig.IsEnabled)
 
 	event.SetObjectTaggingFunc(func(ctx context.Context, bucket, object string, newTagKey, newTagValue string) error {
 		opts := ObjectOptions{}

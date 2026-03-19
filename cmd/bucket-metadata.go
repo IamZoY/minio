@@ -29,8 +29,6 @@ import (
 	"path"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
-	"github.com/minio/minio-go/v7/pkg/tags"
 	bucketsse "github.com/IamZoY/minio/internal/bucket/encryption"
 	"github.com/IamZoY/minio/internal/bucket/lifecycle"
 	objectlock "github.com/IamZoY/minio/internal/bucket/object/lock"
@@ -40,6 +38,8 @@ import (
 	"github.com/IamZoY/minio/internal/event"
 	"github.com/IamZoY/minio/internal/kms"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/madmin-go/v3"
+	"github.com/minio/minio-go/v7/pkg/tags"
 	"github.com/minio/pkg/v3/policy"
 	"github.com/minio/sio"
 )

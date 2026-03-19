@@ -26,11 +26,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/minio/madmin-go/v3"
-	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/IamZoY/minio/internal/config"
 	cfgldap "github.com/IamZoY/minio/internal/config/identity/ldap"
 	"github.com/IamZoY/minio/internal/config/identity/openid"
+	"github.com/minio/madmin-go/v3"
+	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/minio/mux"
 	"github.com/minio/pkg/v3/ldap"
 	"github.com/minio/pkg/v3/policy"

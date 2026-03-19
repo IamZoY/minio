@@ -26,8 +26,6 @@ import (
 	"sort"
 	"time"
 
-	"github.com/dustin/go-humanize"
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/bucket/lifecycle"
 	objectlock "github.com/IamZoY/minio/internal/bucket/object/lock"
 	"github.com/IamZoY/minio/internal/bucket/replication"
@@ -35,6 +33,8 @@ import (
 	"github.com/IamZoY/minio/internal/color"
 	"github.com/IamZoY/minio/internal/config/storageclass"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/dustin/go-humanize"
+	"github.com/minio/madmin-go/v3"
 	"github.com/minio/pkg/v3/console"
 	"github.com/minio/pkg/v3/wildcard"
 	"github.com/minio/pkg/v3/workers"

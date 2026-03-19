@@ -28,7 +28,6 @@ import (
 	"github.com/IamZoY/minio/internal/config/browser"
 	"github.com/IamZoY/minio/internal/config/eventtag"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/config"
 	"github.com/IamZoY/minio/internal/config/api"
 	"github.com/IamZoY/minio/internal/config/batch"
@@ -53,6 +52,7 @@ import (
 	"github.com/IamZoY/minio/internal/crypto"
 	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/madmin-go/v3"
 	"github.com/minio/pkg/v3/env"
 )
 

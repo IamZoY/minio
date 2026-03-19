@@ -25,9 +25,9 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/IamZoY/minio/internal/config"
 	"github.com/cespare/xxhash/v2"
 	"github.com/minio/minio-go/v7/pkg/set"
-	"github.com/IamZoY/minio/internal/config"
 	"github.com/minio/pkg/v3/ellipses"
 	"github.com/minio/pkg/v3/env"
 )

@@ -31,8 +31,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/auth"
+	"github.com/minio/madmin-go/v3"
 	"github.com/minio/mux"
 )
 

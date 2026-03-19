@@ -26,10 +26,6 @@ import (
 	"time"
 
 	consoleapi "github.com/IamZoY/console/api"
-	"github.com/minio/dnscache"
-	"github.com/minio/madmin-go/v3"
-	"github.com/minio/minio-go/v7"
-	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/IamZoY/minio/internal/bpool"
 	"github.com/IamZoY/minio/internal/bucket/bandwidth"
 	"github.com/IamZoY/minio/internal/config"
@@ -38,9 +34,12 @@ import (
 	"github.com/IamZoY/minio/internal/grid"
 	"github.com/IamZoY/minio/internal/handlers"
 	"github.com/IamZoY/minio/internal/kms"
+	"github.com/minio/dnscache"
+	"github.com/minio/madmin-go/v3"
+	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/set"
 	"go.uber.org/atomic"
 
-	"github.com/dustin/go-humanize"
 	"github.com/IamZoY/minio/internal/auth"
 	"github.com/IamZoY/minio/internal/config/callhome"
 	"github.com/IamZoY/minio/internal/config/compress"
@@ -51,6 +50,7 @@ import (
 	"github.com/IamZoY/minio/internal/config/storageclass"
 	"github.com/IamZoY/minio/internal/config/subnet"
 	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/dustin/go-humanize"
 	etcd "go.etcd.io/etcd/client/v3"
 
 	levent "github.com/IamZoY/minio/internal/config/lambda/event"

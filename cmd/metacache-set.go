@@ -33,13 +33,13 @@ import (
 	"sync/atomic"
 	"time"
 
-	jsoniter "github.com/json-iterator/go"
 	"github.com/IamZoY/minio/internal/bucket/lifecycle"
 	"github.com/IamZoY/minio/internal/bucket/object/lock"
 	"github.com/IamZoY/minio/internal/bucket/versioning"
 	"github.com/IamZoY/minio/internal/color"
 	"github.com/IamZoY/minio/internal/hash"
 	xioutil "github.com/IamZoY/minio/internal/ioutil"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/minio/pkg/v3/console"
 )
 

@@ -27,12 +27,12 @@ import (
 	"strings"
 	"sync/atomic"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/auth"
 	"github.com/IamZoY/minio/internal/handlers"
 	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/IamZoY/minio/internal/logger"
 	"github.com/IamZoY/minio/internal/mcontext"
+	"github.com/minio/madmin-go/v3"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

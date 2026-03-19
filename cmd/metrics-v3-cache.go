@@ -22,8 +22,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/cachevalue"
+	"github.com/minio/madmin-go/v3"
 )
 
 // metricsCache - cache for metrics.

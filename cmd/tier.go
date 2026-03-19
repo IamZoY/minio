@@ -32,10 +32,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/crypto"
 	"github.com/IamZoY/minio/internal/hash"
 	"github.com/IamZoY/minio/internal/kms"
+	"github.com/minio/madmin-go/v3"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

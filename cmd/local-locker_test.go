@@ -24,8 +24,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/IamZoY/minio/internal/dsync"
+	"github.com/google/uuid"
 )
 
 func TestLocalLockerExpire(t *testing.T) {

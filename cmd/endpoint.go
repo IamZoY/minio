@@ -32,11 +32,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dustin/go-humanize"
-	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/IamZoY/minio/internal/config"
 	"github.com/IamZoY/minio/internal/logger"
 	"github.com/IamZoY/minio/internal/mountinfo"
+	"github.com/dustin/go-humanize"
+	"github.com/minio/minio-go/v7/pkg/set"
 	"github.com/minio/pkg/v3/env"
 	xnet "github.com/minio/pkg/v3/net"
 )

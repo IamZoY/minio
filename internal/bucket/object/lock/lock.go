@@ -30,9 +30,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/beevik/ntp"
 	"github.com/IamZoY/minio/internal/amztime"
 	xhttp "github.com/IamZoY/minio/internal/http"
+	"github.com/beevik/ntp"
 
 	"github.com/IamZoY/minio/internal/logger"
 	"github.com/minio/pkg/v3/env"

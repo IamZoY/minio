@@ -28,11 +28,11 @@ import (
 	"path/filepath"
 	"time"
 
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/IamZoY/minio/internal/event"
 	"github.com/IamZoY/minio/internal/logger"
 	"github.com/IamZoY/minio/internal/once"
 	"github.com/IamZoY/minio/internal/store"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

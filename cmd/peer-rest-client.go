@@ -30,12 +30,12 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/bucket/bandwidth"
 	"github.com/IamZoY/minio/internal/grid"
 	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/IamZoY/minio/internal/logger"
 	"github.com/IamZoY/minio/internal/rest"
+	"github.com/minio/madmin-go/v3"
 	xnet "github.com/minio/pkg/v3/net"
 )
 

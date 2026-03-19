@@ -32,11 +32,11 @@ import (
 	"hash"
 	"time"
 
+	"github.com/IamZoY/minio/internal/bpool"
 	"github.com/buger/jsonparser"
 	"github.com/dustin/go-humanize"
 	jwtgo "github.com/golang-jwt/jwt/v4"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/IamZoY/minio/internal/bpool"
 )
 
 // SigningMethodHMAC - Implements the HMAC-SHA family of signing methods signing methods

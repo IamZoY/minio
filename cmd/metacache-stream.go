@@ -25,10 +25,10 @@ import (
 	"strings"
 	"sync"
 
-	jsoniter "github.com/json-iterator/go"
-	"github.com/klauspost/compress/s2"
 	"github.com/IamZoY/minio/internal/bpool"
 	xioutil "github.com/IamZoY/minio/internal/ioutil"
+	jsoniter "github.com/json-iterator/go"
+	"github.com/klauspost/compress/s2"
 	"github.com/tinylib/msgp/msgp"
 	"github.com/valyala/bytebufferpool"
 )

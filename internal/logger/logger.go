@@ -32,11 +32,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/IamZoY/minio/internal/color"
+	xhttp "github.com/IamZoY/minio/internal/http"
 	"github.com/minio/highwayhash"
 	"github.com/minio/madmin-go/v3"
 	"github.com/minio/madmin-go/v3/logger/log"
-	"github.com/IamZoY/minio/internal/color"
-	xhttp "github.com/IamZoY/minio/internal/http"
 )
 
 // HighwayHash key for logging in anonymous mode

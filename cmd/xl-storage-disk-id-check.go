@@ -31,11 +31,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/minio/madmin-go/v3"
 	"github.com/IamZoY/minio/internal/cachevalue"
 	"github.com/IamZoY/minio/internal/grid"
 	xioutil "github.com/IamZoY/minio/internal/ioutil"
 	"github.com/IamZoY/minio/internal/logger"
+	"github.com/minio/madmin-go/v3"
 )
 
 //go:generate stringer -type=storageMetric -trimprefix=storageMetric $GOFILE
