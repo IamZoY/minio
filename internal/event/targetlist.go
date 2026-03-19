@@ -41,20 +41,35 @@ type ObjectTaggingFunc func(ctx context.Context, bucket, object string, newTagKe
 type EventTagConfigFunc func() bool
 
 var (
+	tagFnMu          sync.RWMutex
 	objectTaggingFn  ObjectTaggingFunc
 	eventTagConfigFn EventTagConfigFunc
 )
 
 // SetObjectTaggingFunc sets the function to use for object tagging.
-// This should be called from cmd package during initialization.
 func SetObjectTaggingFunc(fn ObjectTaggingFunc) {
+	tagFnMu.Lock()
+	defer tagFnMu.Unlock()
 	objectTaggingFn = fn
 }
 
+func getObjectTaggingFunc() ObjectTaggingFunc {
+	tagFnMu.RLock()
+	defer tagFnMu.RUnlock()
+	return objectTaggingFn
+}
+
 // SetEventTagConfigFunc sets the function to get event tag config.
-// This should be called from cmd package during initialization.
 func SetEventTagConfigFunc(fn EventTagConfigFunc) {
+	tagFnMu.Lock()
+	defer tagFnMu.Unlock()
 	eventTagConfigFn = fn
+}
+
+func getEventTagConfigFunc() EventTagConfigFunc {
+	tagFnMu.RLock()
+	defer tagFnMu.RUnlock()
+	return eventTagConfigFn
 }
 
 const (
@@ -295,6 +310,7 @@ func (list *TargetList) Send(event Event, targetIDset TargetIDSet, sync bool) {
 
 func (list *TargetList) sendSync(event Event, targetIDset TargetIDSet) {
 	var wg sync.WaitGroup
+	var anySuccess atomic.Bool
 	for id := range targetIDset {
 		target, ok := list.get(id)
 		if !ok {
@@ -309,7 +325,6 @@ func (list *TargetList) sendSync(event Event, targetIDset TargetIDSet) {
 			defer list.currentSendCalls.Add(-1)
 			defer wg.Done()
 
-			var eventSent bool
 			err := target.Save(event)
 			if err != nil {
 				list.eventsErrorsTotal.Add(1)
@@ -318,17 +333,17 @@ func (list *TargetList) sendSync(event Event, targetIDset TargetIDSet) {
 				reqInfo.AppendTags("targetID", id.String())
 				logger.LogOnceIf(logger.SetReqInfo(context.Background(), reqInfo), logSubsys, err, id.String())
 			} else {
-				eventSent = true
-			}
-
-			// Apply event tagging if enabled
-			if eventTagConfigFn != nil && eventTagConfigFn() && objectTaggingFn != nil {
-				applyEventTagging(event, eventSent)
+				anySuccess.Store(true)
 			}
 		}(id, target)
 	}
 	wg.Wait()
 	list.totalEvents.Add(1)
+
+	// Tag once after all targets have been processed
+	if cfgFn := getEventTagConfigFunc(); cfgFn != nil && cfgFn() {
+		applyEventTagging(event, anySuccess.Load())
+	}
 }
 
 func (list *TargetList) sendAsync(event Event, targetIDset TargetIDSet) {
@@ -431,54 +446,43 @@ func NewTargetList(ctx context.Context) *TargetList {
 	return list
 }
 
-// isObjectCreatedEvent checks if the event is an ObjectCreated event
+// isObjectCreatedEvent checks if the event is a real object creation event.
+// Excludes PutTagging/DeleteTagging/PutRetention/PutLegalHold to avoid
+// infinite recursive loops (tagging triggers PutTagging event) and
+// semantically incorrect tagging of metadata-only operations.
 func isObjectCreatedEvent(eventName Name) bool {
-	objectCreatedEvents := []Name{
-		ObjectCreatedCompleteMultipartUpload,
+	switch eventName {
+	case ObjectCreatedCompleteMultipartUpload,
 		ObjectCreatedCopy,
 		ObjectCreatedPost,
-		ObjectCreatedPut,
-		ObjectCreatedPutRetention,
-		ObjectCreatedPutLegalHold,
-		ObjectCreatedPutTagging,
-		ObjectCreatedDeleteTagging,
-	}
-	for _, e := range objectCreatedEvents {
-		if eventName == e {
-			return true
-		}
+		ObjectCreatedPut:
+		return true
 	}
 	return false
 }
 
-// applyEventTagging applies tags to objects based on event delivery status
-func applyEventTagging(event Event, eventSent bool) {
-	// Only tag ObjectCreated events
-	if !isObjectCreatedEvent(event.EventName) {
+// applyEventTagging applies tags to objects based on event delivery status.
+// Runs synchronously in the send worker goroutine (no extra goroutine spawned).
+func applyEventTagging(ev Event, eventSent bool) {
+	if !isObjectCreatedEvent(ev.EventName) {
 		return
 	}
 
-	// Decode object name
-	objectName, err := url.QueryUnescape(event.S3.Object.Key)
+	objectName, err := url.QueryUnescape(ev.S3.Object.Key)
 	if err != nil {
-		logger.LogOnceIf(context.Background(), logSubsys, fmt.Errorf("Error decoding object key: %w", err), event.S3.Object.Key)
 		return
 	}
 
-	// Determine tag value based on event send status
 	tagValue := "Success"
 	if !eventSent {
 		tagValue = "Failed"
 	}
 
-	// Apply tags asynchronously
-	ctx := context.Background()
-	bucket := event.S3.Bucket.Name
-
-	logger.Info("Event tagging: Tagging object %s/%s with EventSent=%s (event: %s)", bucket, objectName, tagValue, event.EventName)
-	go func() {
-		if err := objectTaggingFn(ctx, bucket, objectName, "EventSent", tagValue); err != nil {
-			logger.LogOnceIf(ctx, logSubsys, fmt.Errorf("Error applying object tag: %w", err), event.S3.Object.Key)
-		}
-	}()
+	tagFn := getObjectTaggingFunc()
+	if tagFn == nil {
+		return
+	}
+	if err := tagFn(context.Background(), ev.S3.Bucket.Name, objectName, "EventSent", tagValue); err != nil {
+		logger.LogOnceIf(context.Background(), logSubsys, fmt.Errorf("event tagging failed for %s/%s: %w", ev.S3.Bucket.Name, objectName, err), ev.S3.Object.Key)
+	}
 }

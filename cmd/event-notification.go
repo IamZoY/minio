@@ -28,7 +28,6 @@ import (
 	"github.com/IamZoY/minio/internal/crypto"
 	"github.com/IamZoY/minio/internal/event"
 	xhttp "github.com/IamZoY/minio/internal/http"
-	"github.com/IamZoY/minio/internal/logger"
 	"github.com/IamZoY/minio/internal/pubsub"
 	"github.com/minio/minio-go/v7/pkg/tags"
 	"github.com/minio/pkg/v3/policy"
@@ -105,6 +104,9 @@ func (evnot *EventNotifier) InitBucketTargets(ctx context.Context, objAPI Object
 	// Initialize event tagging functions
 	initEventTagging(objAPI)
 
+	// Start the tag index manager for fast tag-based queries
+	StartTagIndexManager(ctx, objAPI)
+
 	return nil
 }
 
@@ -115,39 +117,32 @@ func initEventTagging(objAPI ObjectLayer) {
 		return globalEventTagConfig.IsEnabled()
 	})
 
-	// Set function to apply object tags (merges with existing tags)
 	event.SetObjectTaggingFunc(func(ctx context.Context, bucket, object string, newTagKey, newTagValue string) error {
 		opts := ObjectOptions{}
 
-		// Get existing tags
 		existingTags, err := objAPI.GetObjectTags(ctx, bucket, object, opts)
 		if err != nil {
-			// If object has no tags, create new tags
 			existingTags = nil
 		}
 
-		// Merge with new tag
 		tagMap := make(map[string]string)
 		if existingTags != nil {
-			for key, value := range existingTags.ToMap() {
-				tagMap[key] = value
+			for k, v := range existingTags.ToMap() {
+				tagMap[k] = v
 			}
 		}
 		tagMap[newTagKey] = newTagValue
 
-		// Create merged tags
 		mergedTags, err := tags.NewTags(tagMap, true)
 		if err != nil {
 			return err
 		}
 
-		// Put merged tags
-		_, err = objAPI.PutObjectTags(ctx, bucket, object, mergedTags.String(), opts)
-		if err != nil {
+		if _, err := objAPI.PutObjectTags(ctx, bucket, object, mergedTags.String(), opts); err != nil {
 			return err
 		}
-		// Log successful tag application
-		logger.Info("Event tagging: Successfully tagged object %s/%s with EventSent=%s", bucket, object, newTagValue)
+
+		SendIndexUpdate(bucket, object, newTagKey, newTagValue)
 		return nil
 	})
 }

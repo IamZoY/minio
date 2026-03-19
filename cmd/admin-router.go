@@ -190,6 +190,9 @@ func registerAdminRouter(router *mux.Router, enableConfigOps bool) {
 			adminRouter.Methods(http.MethodPost).Path(adminVersion + "/rebalance/stop").HandlerFunc(adminMiddleware(adminAPI.RebalanceStop, traceAllFlag))
 		}
 
+		// Event tag index rebuild
+		adminRouter.Methods(http.MethodPost).Path(adminVersion + "/rebuild-tag-index").HandlerFunc(adminMiddleware(adminAPI.RebuildTagIndexHandler, traceAllFlag))
+
 		// Profiling operations - deprecated API
 		adminRouter.Methods(http.MethodPost).Path(adminVersion+"/profiling/start").HandlerFunc(adminMiddleware(adminAPI.StartProfilingHandler, traceAllFlag, noObjLayerFlag)).
 			Queries("profilerType", "{profilerType:.*}")

@@ -3560,3 +3560,56 @@ func createHostAnonymizer() map[string]string {
 	}
 	return hostAnonymizer
 }
+
+// RebuildTagIndexHandler - POST /minio/admin/v3/rebuild-tag-index?bucket={bucket}
+// Rebuilds the event tag index for the specified bucket by scanning all objects.
+func (a adminAPIHandlers) RebuildTagIndexHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	objectAPI, _ := validateAdminReq(ctx, w, r, policy.HealAdminAction)
+	if objectAPI == nil {
+		return
+	}
+
+	bucket := r.Form.Get("bucket")
+	if bucket == "" {
+		bucket = r.URL.Query().Get("bucket")
+	}
+
+	if bucket == "" {
+		writeErrorResponseJSON(ctx, w, errorCodes.ToAPIErr(ErrInvalidBucketName), r.URL)
+		return
+	}
+
+	// Verify the bucket exists
+	if _, err := objectAPI.GetBucketInfo(ctx, bucket, BucketOptions{}); err != nil {
+		writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+		return
+	}
+
+	counts, err := RebuildTagIndex(ctx, objectAPI, bucket)
+	if err != nil {
+		writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+		return
+	}
+
+	resp := struct {
+		Status string                    `json:"status"`
+		Bucket string                    `json:"bucket"`
+		Counts map[string]map[string]int `json:"counts"`
+	}{
+		Status: "success",
+		Bucket: bucket,
+		Counts: counts,
+	}
+
+	data, err := json.Marshal(resp)
+	if err != nil {
+		writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
