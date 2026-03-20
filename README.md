@@ -156,6 +156,34 @@ mc ls data/
 
 Follow the MinIO Client [Quickstart Guide](https://docs.min.io/community/minio-object-store/reference/minio-mc.html#quickstart) for further instructions.
 
+## Event Tag Index
+
+MinIO includes a built-in event tag index for tracking and querying objects by their event delivery status. When event tagging is enabled, objects are automatically tagged with `EventSent=Success` or `EventSent=Failed` after webhook notification delivery.
+
+### Key Features
+
+- **Query objects by tag** without scanning the entire bucket
+- **Scalable to 100M+ objects** — uses sharded, compressed chunk files with only ~1 KB of metadata in memory per bucket
+- **Streaming API** for retrieving all matching objects in a single request
+- **Automatic index updates** on event delivery with background compaction
+- **Admin rebuild** via console or API to reindex from scratch
+
+### API Endpoints
+
+```
+GET /{bucket}/?list-by-tag&tag-key=EventSent&tag-value=Failed       # paginated
+GET /{bucket}/?stream-by-tag&tag-key=EventSent&tag-value=Failed      # stream all
+POST /minio/admin/v3/rebuild-tag-index?bucket={bucket}               # rebuild
+```
+
+### Enable Event Tagging
+
+```
+export MINIO_EVENT_TAG_ENABLE_EVENT_TAGGING=on
+```
+
+See [docs/extensions/event-tag-index.md](docs/extensions/event-tag-index.md) for full documentation including architecture, storage layout, and performance benchmarks.
+
 ## Explore Further
 
 - [The MinIO documentation website](https://docs.min.io/community/minio-object-store/index.html)

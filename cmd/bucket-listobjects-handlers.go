@@ -20,6 +20,7 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -339,6 +340,77 @@ type TaggedObjectInfo struct {
 	TagValue string `json:"tagValue"`
 }
 
+// StreamObjectsByTagHandler - GET Bucket (Stream All Objects By Tag)
+// Returns ALL objects matching a tag key/value in a single streaming response.
+// Uses newline-delimited JSON (NDJSON) so results stream as chunks are read,
+// keeping memory usage constant regardless of how many objects match.
+func (api objectAPIHandlers) StreamObjectsByTagHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := newContext(r, w, "StreamObjectsByTag")
+	defer logger.AuditLog(ctx, w, r, mustGetClaimsFromToken(r))
+
+	vars := mux.Vars(r)
+	bucket := vars["bucket"]
+
+	objectAPI := api.ObjectAPI()
+	if objectAPI == nil {
+		writeErrorResponse(ctx, w, errorCodes.ToAPIErr(ErrServerNotInitialized), r.URL)
+		return
+	}
+
+	if s3Error := checkRequestAuthType(ctx, r, policy.ListBucketAction, bucket, ""); s3Error != ErrNone {
+		writeErrorResponse(ctx, w, errorCodes.ToAPIErr(s3Error), r.URL)
+		return
+	}
+
+	urlValues := r.Form
+	tagKey := urlValues.Get("tag-key")
+	tagValue := urlValues.Get("tag-value")
+
+	if tagKey == "" || tagValue == "" {
+		writeErrorResponse(ctx, w, errorCodes.ToAPIErr(ErrInvalidQueryParams), r.URL)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/x-ndjson")
+	w.Header().Set("Transfer-Encoding", "chunked")
+	w.WriteHeader(http.StatusOK)
+
+	flusher, hasFlusher := w.(http.Flusher)
+	enc := json.NewEncoder(w)
+
+	total, err := StreamTagIndex(ctx, objectAPI, bucket, tagKey, tagValue, func(names []string) error {
+		for _, name := range names {
+			if writeErr := enc.Encode(TaggedObjectInfo{
+				Key:      name,
+				TagValue: tagValue,
+			}); writeErr != nil {
+				return writeErr
+			}
+		}
+		if hasFlusher {
+			flusher.Flush()
+		}
+		return nil
+	})
+	if err != nil {
+		// Can't send error response after headers are written, just log it
+		internalLogIf(ctx, fmt.Errorf("stream objects by tag error: %w", err))
+		return
+	}
+
+	// Write a final summary line
+	enc.Encode(struct {
+		TotalCount int64 `json:"totalCount"`
+		Done       bool  `json:"done"`
+	}{
+		TotalCount: total,
+		Done:       true,
+	})
+	if hasFlusher {
+		flusher.Flush()
+	}
+}
+
 // ListObjectsByTagHandler - GET Bucket (List Objects By Tag)
 // Returns objects that match a specific tag key/value from the event tag index.
 func (api objectAPIHandlers) ListObjectsByTagHandler(w http.ResponseWriter, r *http.Request) {
@@ -380,57 +452,25 @@ func (api objectAPIHandlers) ListObjectsByTagHandler(w http.ResponseWriter, r *h
 		}
 	}
 
-	allObjects := QueryTagIndex(bucket, tagKey, tagValue)
-	if allObjects == nil {
-		allObjects = []string{}
+	objects, nextMarker, totalCount, isTruncated, err := QueryTagIndex(ctx, objectAPI, bucket, tagKey, tagValue, marker, maxKeys)
+	if err != nil {
+		writeErrorResponse(ctx, w, toAPIError(ctx, err), r.URL)
+		return
 	}
 
-	totalCount := len(allObjects)
-
-	// Apply marker-based pagination
-	startIdx := 0
-	if marker != "" {
-		for i, name := range allObjects {
-			if name == marker {
-				startIdx = i + 1
-				break
-			}
-		}
-	}
-
-	isTruncated := false
-	endIdx := startIdx + maxKeys
-	if endIdx > len(allObjects) {
-		endIdx = len(allObjects)
-	} else if endIdx < len(allObjects) {
-		isTruncated = true
-	}
-
-	pageObjects := allObjects[startIdx:endIdx]
-
-	// Validate objects still exist (remove stale entries)
-	validObjects := make([]TaggedObjectInfo, 0, len(pageObjects))
-	for _, objName := range pageObjects {
-		_, err := objectAPI.GetObjectInfo(ctx, bucket, objName, ObjectOptions{})
-		if err != nil {
-			continue
-		}
+	validObjects := make([]TaggedObjectInfo, 0, len(objects))
+	for _, objName := range objects {
 		validObjects = append(validObjects, TaggedObjectInfo{
 			Key:      objName,
 			TagValue: tagValue,
 		})
 	}
 
-	nextMarker := ""
-	if isTruncated && len(pageObjects) > 0 {
-		nextMarker = pageObjects[len(pageObjects)-1]
-	}
-
 	resp := ListObjectsByTagResponse{
 		Objects:         validObjects,
 		IsTruncated:     isTruncated,
 		NextMarker:      nextMarker,
-		TotalMatchCount: totalCount,
+		TotalMatchCount: int(totalCount),
 	}
 
 	data, err := json.Marshal(resp)

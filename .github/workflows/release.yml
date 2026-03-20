@@ -76,15 +76,25 @@ jobs:
         id: release_notes
         run: |
           cat > release_notes.md << 'EOF'
-          ## MinIO Release ${{ steps.get_tag.outputs.TAG }}
+          ## Release ${{ steps.get_tag.outputs.TAG }}
 
-          ### Features
-          - Event tag index with O(1) hash map lookups
-          - ListObjectsByTag API for querying objects by any tag key/value
-          - Automatic EventSent tagging on webhook delivery (Success/Failed)
-          - Tag index rebuild via admin API
+          ### Scalable Event Tag Index
+          - Sharded inverted index with delta buffering — handles 100M+ objects
+          - Chunks stored in user bucket (`.minio.tag-index/`) as text+zstd — ~50% smaller than JSON
+          - Only ~1 KB meta in `.minio.sys` per bucket regardless of scale
+          - Paginated query API (`list-by-tag`) and streaming API (`stream-by-tag`)
+          - Automatic EventSent tagging on webhook delivery (Success/Failed/Untagged)
+          - Tag index rebuild via admin API and console UI
+          - Auto-migration from all previous index formats
+
+          ### Event Notification System
+          - Configurable event tagging with UI toggle
           - Multi-key tag indexing support
+          - Background compaction with 4 update workers and 100K channel capacity
+
+          ### Console
           - Full admin console with user/group/policy management
+          - Tag index rebuild button in admin UI
 
           ### Binaries
           | Platform | File |
@@ -100,7 +110,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.get_tag.outputs.TAG }}
-          name: MinIO ${{ steps.get_tag.outputs.TAG }}
+          name: ${{ steps.get_tag.outputs.TAG }}
           body_path: release_notes.md
           draft: false
           prerelease: false

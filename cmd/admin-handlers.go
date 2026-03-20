@@ -3594,9 +3594,9 @@ func (a adminAPIHandlers) RebuildTagIndexHandler(w http.ResponseWriter, r *http.
 	}
 
 	resp := struct {
-		Status string                    `json:"status"`
-		Bucket string                    `json:"bucket"`
-		Counts map[string]map[string]int `json:"counts"`
+		Status string                      `json:"status"`
+		Bucket string                      `json:"bucket"`
+		Counts map[string]map[string]int64 `json:"counts"`
 	}{
 		Status: "success",
 		Bucket: bucket,

@@ -501,7 +501,11 @@ func registerAPIRouter(router *mux.Router) {
 			HandlerFunc(s3APIMiddleware(api.DeleteBucketTaggingHandler)).
 			Queries("tagging", "")
 
-		// ListObjectsByTag
+		// StreamObjectsByTag - stream all objects matching a tag
+		router.Methods(http.MethodGet).
+			HandlerFunc(s3APIMiddleware(api.StreamObjectsByTagHandler)).
+			Queries("stream-by-tag", "")
+		// ListObjectsByTag - paginated list of objects matching a tag
 		router.Methods(http.MethodGet).
 			HandlerFunc(s3APIMiddleware(api.ListObjectsByTagHandler)).
 			Queries("list-by-tag", "")
