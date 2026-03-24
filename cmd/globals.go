@@ -202,8 +202,8 @@ var (
 	// globalBrowserConfig Browser user configurable settings
 	globalBrowserConfig browser.Config
 
-	// globalEventTagConfig holds event tagging configuration
-	globalEventTagConfig eventtag.Config
+	// globalEventTagConfig holds event tagging configuration (multi-target)
+	globalEventTagConfig = eventtag.NewMultiConfig()
 
 	// This flag is set to 'true' when MINIO_UPDATE env is set to 'off'. Default is false.
 	globalInplaceUpdateDisabled = false

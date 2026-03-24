@@ -32,5 +32,29 @@ var (
 			Optional:    true,
 			Type:        "on|off",
 		},
+		config.HelpKV{
+			Key:         tagName,
+			Description: `tag key applied to objects on event delivery` + defaultHelpPostfix(tagName),
+			Optional:    true,
+			Type:        "string",
+		},
+		config.HelpKV{
+			Key:         tagSuccess,
+			Description: `tag value when event is delivered successfully` + defaultHelpPostfix(tagSuccess),
+			Optional:    true,
+			Type:        "string",
+		},
+		config.HelpKV{
+			Key:         tagFailed,
+			Description: `tag value when event delivery fails` + defaultHelpPostfix(tagFailed),
+			Optional:    true,
+			Type:        "string",
+		},
+		config.HelpKV{
+			Key:         eventTypes,
+			Description: `comma-separated S3 event types that trigger this tag rule` + defaultHelpPostfix(eventTypes),
+			Optional:    true,
+			Type:        "string",
+		},
 	}
 )

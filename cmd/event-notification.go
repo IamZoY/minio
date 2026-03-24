@@ -112,8 +112,22 @@ func (evnot *EventNotifier) InitBucketTargets(ctx context.Context, objAPI Object
 
 // initEventTagging initializes the event tagging function pointers
 func initEventTagging(objAPI ObjectLayer) {
-	// Set function to check if event tagging is enabled
-	event.SetEventTagConfigFunc(globalEventTagConfig.IsEnabled)
+	event.SetTagRulesFunc(func() []event.TagRule {
+		cfgs := globalEventTagConfig.GetAll()
+		if len(cfgs) == 0 {
+			return nil
+		}
+		rules := make([]event.TagRule, 0, len(cfgs))
+		for _, cfg := range cfgs {
+			rules = append(rules, event.TagRule{
+				TagName:    cfg.TagName,
+				TagSuccess: cfg.TagSuccess,
+				TagFailed:  cfg.TagFailed,
+				EventTypes: cfg.EventTypes,
+			})
+		}
+		return rules
+	})
 
 	event.SetObjectTaggingFunc(func(ctx context.Context, bucket, object string, newTagKey, newTagValue string) error {
 		opts := ObjectOptions{}

@@ -253,12 +253,171 @@ No manual intervention required.
 
 ## Configuration
 
-Event tagging is controlled by:
+### Quick Start (single default tag)
 
+Enable event tagging with the default `EventSent` tag (backward-compatible):
+
+```bash
+export MINIO_EVENT_TAG_ENABLE_EVENT_TAGGING=on
 ```
-MINIO_EVENT_TAG_ENABLE_EVENT_TAGGING=on   # Enable automatic event tagging
+
+Or via `mc admin config`:
+
+```bash
+mc admin config set myminio event_tag enable_event_tagging=on
 ```
 
-Or via the MinIO configuration subsystem under the `event_tag` key.
+This applies the tag `EventSent=Success` or `EventSent=Failed` to every
+`ObjectCreated` event.
 
-The tag index is automatically managed when event tagging is enabled. No additional configuration is needed for the index itself.
+### Custom Tag Configuration
+
+You can customize the tag key, success/failure values, and which S3 events
+trigger tagging:
+
+```bash
+mc admin config set myminio event_tag \
+    enable_event_tagging=on \
+    tag_name=EventSentToDiode \
+    tag_success=Success \
+    tag_failed=Failed \
+    event_types=s3:ObjectCreated:Put,s3:ObjectCreated:Post,s3:ObjectCreated:Copy,s3:ObjectCreated:CompleteMultipartUpload
+```
+
+### Multiple Tag Rules
+
+The `event_tag` subsystem supports multiple named targets. Each target defines
+an independent tag rule:
+
+```bash
+# Rule 1: Track event delivery to Diode
+mc admin config set myminio event_tag:diode \
+    enable_event_tagging=on \
+    tag_name=EventSentToDiode \
+    tag_success=Success \
+    tag_failed=Failed \
+    event_types=s3:ObjectCreated:Put,s3:ObjectCreated:Post,s3:ObjectCreated:Copy,s3:ObjectCreated:CompleteMultipartUpload
+
+# Rule 2: Track audit delivery
+mc admin config set myminio event_tag:audit \
+    enable_event_tagging=on \
+    tag_name=AuditDelivered \
+    tag_success=Delivered \
+    tag_failed=Pending \
+    event_types=s3:ObjectCreated:Put
+```
+
+When an event fires, all matching rules are evaluated. Each rule applies its
+own tag to the object independently.
+
+### Configuration Keys
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `enable_event_tagging` | `off` | Enable this tag rule (`on`/`off`) |
+| `tag_name` | `EventSent` | Tag key applied to objects |
+| `tag_success` | `Success` | Tag value on successful event delivery |
+| `tag_failed` | `Failed` | Tag value when event delivery fails |
+| `event_types` | `s3:ObjectCreated:Put,Post,Copy,CompleteMultipartUpload` | Comma-separated S3 event types that trigger this rule |
+
+### Environment Variables
+
+For the default target:
+
+| Variable | Description |
+|----------|-------------|
+| `MINIO_EVENT_TAG_ENABLE_EVENT_TAGGING` | `on`/`off` |
+| `MINIO_EVENT_TAG_TAG_NAME` | Tag key (default `EventSent`) |
+| `MINIO_EVENT_TAG_TAG_SUCCESS` | Success value (default `Success`) |
+| `MINIO_EVENT_TAG_TAG_FAILED` | Failed value (default `Failed`) |
+| `MINIO_EVENT_TAG_EVENT_TYPES` | Comma-separated event types |
+
+### Console UI
+
+Event tag rules can also be managed from the MinIO Console under
+**Settings > Event Tagging**. The UI supports adding, editing, and removing
+tag rules dynamically.
+
+---
+
+## Using Event Tags from an External Application
+
+MinIO applies configurable tags to objects when events are sent to notification
+targets (webhooks, Kafka, etc.). Your external application can read and write
+these tags using the standard S3 API.
+
+### Reading Tags (Go / minio-go)
+
+```go
+tags, err := minioClient.GetObjectTagging(ctx, bucket, objectKey, minio.GetObjectTaggingOptions{})
+if err != nil {
+    log.Fatal(err)
+}
+for key, value := range tags.ToMap() {
+    // key = "EventSentToDiode", value = "Success" or "Failed"
+    fmt.Printf("Tag: %s = %s\n", key, value)
+}
+```
+
+### Writing Custom Tags from Your App
+
+Your application can set its own tags on objects to track processing status:
+
+```go
+import "github.com/minio/minio-go/v7/pkg/tags"
+
+tagMap := map[string]string{
+    "StatusFromDiode": "FileSent",
+}
+newTags, _ := tags.NewTags(tagMap, true)
+err := minioClient.PutObjectTagging(ctx, bucket, objectKey, newTags, minio.PutObjectTaggingOptions{})
+```
+
+### Workflow Pattern
+
+A typical integration workflow:
+
+1. **Object uploaded** to MinIO bucket
+2. **MinIO sends event** to webhook/Kafka target
+3. MinIO tags the object: `EventSentToDiode=Success` (or `Failed`)
+4. **Your app polls** for objects with `EventSentToDiode=Failed` using the
+   list-by-tag API to retry failed deliveries
+5. **Your app processes** the object
+6. **Your app tags** the object: `StatusFromDiode=FileSent`
+7. On failure, your app tags: `StatusFromDiode=FileIsRejected`
+
+### Querying by Tag
+
+Use MinIO's tag index API to find objects by tag without scanning:
+
+```bash
+# Paginated query - find all failed deliveries
+curl "http://minio:9000/my-bucket/?list-by-tag&tag-key=EventSentToDiode&tag-value=Failed&max-keys=1000"
+
+# Stream all matching objects
+curl "http://minio:9000/my-bucket/?stream-by-tag&tag-key=StatusFromDiode&tag-value=FileIsRejected"
+```
+
+### Example: Retry Pipeline
+
+```go
+// Find all objects where event delivery failed
+resp, _ := http.Get("http://minio:9000/my-bucket/?stream-by-tag&tag-key=EventSentToDiode&tag-value=Failed")
+scanner := bufio.NewScanner(resp.Body)
+for scanner.Scan() {
+    var obj struct {
+        Key      string `json:"key"`
+        TagValue string `json:"tagValue"`
+        Done     bool   `json:"done"`
+    }
+    json.Unmarshal(scanner.Bytes(), &obj)
+    if obj.Done {
+        break
+    }
+    // Retry processing for obj.Key
+    processObject(obj.Key)
+}
+```
+
+The tag index is automatically managed when event tagging is enabled. No
+additional configuration is needed for the index itself.

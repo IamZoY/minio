@@ -32,18 +32,34 @@ import (
 )
 
 // ObjectTaggingFunc is a function type for applying object tags.
-// This allows the event package to call ObjectLayer methods without direct dependency.
 // It should merge new tags with existing tags.
 type ObjectTaggingFunc func(ctx context.Context, bucket, object string, newTagKey, newTagValue string) error
 
-// TagConfigFunc is a function type for getting event tag config.
-// This allows the event package to check if event tagging is enabled.
-type TagConfigFunc func() bool
+// TagRule describes a single event-tagging rule (tag name, success/fail values, matching events).
+type TagRule struct {
+	TagName    string
+	TagSuccess string
+	TagFailed  string
+	EventTypes []string
+}
+
+// MatchesEvent returns true if the given S3 event name is covered by this rule.
+func (r TagRule) MatchesEvent(eventName string) bool {
+	for _, et := range r.EventTypes {
+		if et == eventName {
+			return true
+		}
+	}
+	return false
+}
+
+// TagRulesFunc returns the current set of enabled tag rules.
+type TagRulesFunc func() []TagRule
 
 var (
-	tagFnMu          sync.RWMutex
-	objectTaggingFn  ObjectTaggingFunc
-	eventTagConfigFn TagConfigFunc
+	tagFnMu         sync.RWMutex
+	objectTaggingFn ObjectTaggingFunc
+	tagRulesFn      TagRulesFunc
 )
 
 // SetObjectTaggingFunc sets the function to use for object tagging.
@@ -59,17 +75,21 @@ func getObjectTaggingFunc() ObjectTaggingFunc {
 	return objectTaggingFn
 }
 
-// SetEventTagConfigFunc sets the function to get event tag config.
-func SetEventTagConfigFunc(fn TagConfigFunc) {
+// SetTagRulesFunc sets the function that returns enabled tag rules.
+func SetTagRulesFunc(fn TagRulesFunc) {
 	tagFnMu.Lock()
 	defer tagFnMu.Unlock()
-	eventTagConfigFn = fn
+	tagRulesFn = fn
 }
 
-func getEventTagConfigFunc() TagConfigFunc {
+func getTagRules() []TagRule {
 	tagFnMu.RLock()
-	defer tagFnMu.RUnlock()
-	return eventTagConfigFn
+	fn := tagRulesFn
+	tagFnMu.RUnlock()
+	if fn == nil {
+		return nil
+	}
+	return fn()
 }
 
 const (
@@ -340,9 +360,9 @@ func (list *TargetList) sendSync(event Event, targetIDset TargetIDSet) {
 	wg.Wait()
 	list.totalEvents.Add(1)
 
-	// Tag once after all targets have been processed
-	if cfgFn := getEventTagConfigFunc(); cfgFn != nil && cfgFn() {
-		applyEventTagging(event, anySuccess.Load())
+	// Apply tag rules after all targets have been processed
+	if rules := getTagRules(); len(rules) > 0 {
+		applyEventTagging(event, anySuccess.Load(), rules)
 	}
 }
 
@@ -446,25 +466,11 @@ func NewTargetList(ctx context.Context) *TargetList {
 	return list
 }
 
-// isObjectCreatedEvent checks if the event is a real object creation event.
-// Excludes PutTagging/DeleteTagging/PutRetention/PutLegalHold to avoid
-// infinite recursive loops (tagging triggers PutTagging event) and
-// semantically incorrect tagging of metadata-only operations.
-func isObjectCreatedEvent(eventName Name) bool {
-	switch eventName {
-	case ObjectCreatedCompleteMultipartUpload,
-		ObjectCreatedCopy,
-		ObjectCreatedPost,
-		ObjectCreatedPut:
-		return true
-	}
-	return false
-}
-
-// applyEventTagging applies tags to objects based on event delivery status.
-// Runs synchronously in the send worker goroutine (no extra goroutine spawned).
-func applyEventTagging(ev Event, eventSent bool) {
-	if !isObjectCreatedEvent(ev.EventName) {
+// applyEventTagging applies matching tag rules to the object based on event delivery status.
+// Each rule specifies which S3 event types it applies to and the tag key/values to write.
+func applyEventTagging(ev Event, eventSent bool, rules []TagRule) {
+	tagFn := getObjectTaggingFunc()
+	if tagFn == nil {
 		return
 	}
 
@@ -473,16 +479,19 @@ func applyEventTagging(ev Event, eventSent bool) {
 		return
 	}
 
-	tagValue := "Success"
-	if !eventSent {
-		tagValue = "Failed"
-	}
-
-	tagFn := getObjectTaggingFunc()
-	if tagFn == nil {
-		return
-	}
-	if err := tagFn(context.Background(), ev.S3.Bucket.Name, objectName, "EventSent", tagValue); err != nil {
-		logger.LogOnceIf(context.Background(), logSubsys, fmt.Errorf("event tagging failed for %s/%s: %w", ev.S3.Bucket.Name, objectName, err), ev.S3.Object.Key)
+	eventStr := ev.EventName.String()
+	for _, rule := range rules {
+		if !rule.MatchesEvent(eventStr) {
+			continue
+		}
+		tagValue := rule.TagSuccess
+		if !eventSent {
+			tagValue = rule.TagFailed
+		}
+		if err := tagFn(context.Background(), ev.S3.Bucket.Name, objectName, rule.TagName, tagValue); err != nil {
+			logger.LogOnceIf(context.Background(), logSubsys,
+				fmt.Errorf("event tagging failed for %s/%s (tag %s): %w", ev.S3.Bucket.Name, objectName, rule.TagName, err),
+				ev.S3.Object.Key+":"+rule.TagName)
+		}
 	}
 }

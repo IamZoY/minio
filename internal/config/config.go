@@ -225,7 +225,6 @@ var SubSystemsSingleTargets = set.CreateStringSet(
 	ILMSubSys,
 	BatchSubSys,
 	BrowserSubSys,
-	EventTagSubSys,
 )
 
 // Constant separators

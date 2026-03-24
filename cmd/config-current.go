@@ -423,8 +423,10 @@ func validateSubSysConfig(ctx context.Context, s config.Config, subSys string, o
 			return err
 		}
 	case config.EventTagSubSys:
-		if _, err := eventtag.LookupConfig(s[config.EventTagSubSys][config.Default]); err != nil {
-			return err
+		for tgt, kvs := range s[config.EventTagSubSys] {
+			if _, err := eventtag.LookupConfig(kvs); err != nil {
+				return fmt.Errorf("event_tag:%s: %w", tgt, err)
+			}
 		}
 	default:
 		if config.LoggerSubSystems.Contains(subSys) {
@@ -711,19 +713,23 @@ func applyDynamicConfigForSubSys(ctx context.Context, objAPI ObjectLayer, s conf
 			globalBrowserConfig.Update(browserCfg)
 		}
 	case config.EventTagSubSys:
-		eventTagCfg, err := eventtag.LookupConfig(s[config.EventTagSubSys][config.Default])
-		if err != nil {
-			errs = append(errs, fmt.Errorf("Unable to apply event tag config: %w", err))
-		} else {
-			wasEnabled := globalEventTagConfig.IsEnabled()
-			globalEventTagConfig.Update(eventTagCfg)
-			isEnabled := eventTagCfg.IsEnabled()
-			if isEnabled != wasEnabled {
-				if isEnabled {
-					logger.Info("Event tagging enabled - objects will be tagged with EventSent status")
-				} else {
-					logger.Info("Event tagging disabled")
-				}
+		wasEnabled := globalEventTagConfig.AnyEnabled()
+		newTargets := make(map[string]eventtag.Config, len(s[config.EventTagSubSys]))
+		for tgt, kvs := range s[config.EventTagSubSys] {
+			cfg, err := eventtag.LookupConfig(kvs)
+			if err != nil {
+				errs = append(errs, fmt.Errorf("Unable to apply event tag config %s: %w", tgt, err))
+				continue
+			}
+			newTargets[tgt] = cfg
+		}
+		globalEventTagConfig.Update(newTargets)
+		isEnabled := globalEventTagConfig.AnyEnabled()
+		if isEnabled != wasEnabled {
+			if isEnabled {
+				logger.Info("Event tagging enabled")
+			} else {
+				logger.Info("Event tagging disabled")
 			}
 		}
 	case config.ILMSubSys:

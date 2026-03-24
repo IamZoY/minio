@@ -156,33 +156,43 @@ mc ls data/
 
 Follow the MinIO Client [Quickstart Guide](https://docs.min.io/community/minio-object-store/reference/minio-mc.html#quickstart) for further instructions.
 
-## Event Tag Index
+## Event Tagging
 
-MinIO includes a built-in event tag index for tracking and querying objects by their event delivery status. When event tagging is enabled, objects are automatically tagged with `EventSent=Success` or `EventSent=Failed` after webhook notification delivery.
+MinIO can automatically tag objects with delivery status when events are sent to notification targets (webhooks, Kafka, etc.). Tag names, values, and matching event types are fully configurable, and multiple tag rules are supported.
 
 ### Key Features
 
-- **Query objects by tag** without scanning the entire bucket
-- **Scalable to 100M+ objects** — uses sharded, compressed chunk files with only ~1 KB of metadata in memory per bucket
+- **Configurable tags** — custom tag key, success/failure values per rule
+- **Multiple tag rules** — define as many independent rules as needed (`event_tag:name`)
+- **Query objects by tag** without scanning the entire bucket (built-in tag index)
+- **Scalable to 100M+ objects** — sharded, compressed chunk files with ~1 KB metadata per bucket
 - **Streaming API** for retrieving all matching objects in a single request
-- **Automatic index updates** on event delivery with background compaction
-- **Admin rebuild** via console or API to reindex from scratch
+- **Console UI** — manage tag rules from Settings > Event Tagging
+
+### Quick Start
+
+```bash
+# Single tag rule with defaults (tag key: EventSent, values: Success/Failed)
+export MINIO_EVENT_TAG_ENABLE_EVENT_TAGGING=on
+
+# Or use mc admin config for custom tag names and multiple rules
+mc admin config set myminio event_tag:diode \
+    enable_event_tagging=on \
+    tag_name=EventSentToDiode \
+    tag_success=Success \
+    tag_failed=Failed \
+    event_types=s3:ObjectCreated:Put,s3:ObjectCreated:Post
+```
 
 ### API Endpoints
 
 ```
-GET /{bucket}/?list-by-tag&tag-key=EventSent&tag-value=Failed       # paginated
-GET /{bucket}/?stream-by-tag&tag-key=EventSent&tag-value=Failed      # stream all
-POST /minio/admin/v3/rebuild-tag-index?bucket={bucket}               # rebuild
+GET /{bucket}/?list-by-tag&tag-key=EventSentToDiode&tag-value=Failed   # paginated
+GET /{bucket}/?stream-by-tag&tag-key=EventSentToDiode&tag-value=Failed  # stream all
+POST /minio/admin/v3/rebuild-tag-index?bucket={bucket}                  # rebuild index
 ```
 
-### Enable Event Tagging
-
-```
-export MINIO_EVENT_TAG_ENABLE_EVENT_TAGGING=on
-```
-
-See [docs/extensions/event-tag-index.md](docs/extensions/event-tag-index.md) for full documentation including architecture, storage layout, and performance benchmarks.
+See [docs/extensions/event-tag-index.md](docs/extensions/event-tag-index.md) for full documentation including architecture, external app integration guide, and performance benchmarks.
 
 ## Explore Further
 

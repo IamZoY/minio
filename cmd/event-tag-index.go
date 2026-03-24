@@ -53,9 +53,8 @@ const (
 	tagUpdateWorkers       = 4
 	tagChunkFormatV2       = "v2" // text+zstd in user bucket
 
-	eventSentTagKey  = "EventSent"
-	tagValueSuccess  = "Success"
-	tagValueFailed   = "Failed"
+	defaultEventSentTagKey = "EventSent"
+
 	tagValueUntagged = "Untagged"
 )
 
@@ -265,6 +264,9 @@ func RebuildTagIndex(ctx context.Context, objAPI ObjectLayer, bucket string) (ma
 		return nil, fmt.Errorf("tag index manager not initialized")
 	}
 
+	// Determine configured tag names for "untagged" classification
+	untaggedKeys := configuredTagNames()
+
 	// Collect all objects grouped by tagKey/tagValue
 	collectors := make(map[string]map[string][]string)
 	marker := ""
@@ -276,17 +278,20 @@ func RebuildTagIndex(ctx context.Context, objAPI ObjectLayer, bucket string) (ma
 		}
 
 		for _, obj := range result.Objects {
-			// Skip our own index files
 			if strings.HasPrefix(obj.Name, tagIndexBucketPrefix+"/") {
 				continue
 			}
 			if obj.UserTags == "" {
-				addToCollectors(collectors, eventSentTagKey, tagValueUntagged, obj.Name)
+				for _, k := range untaggedKeys {
+					addToCollectors(collectors, k, tagValueUntagged, obj.Name)
+				}
 				continue
 			}
 			parsedTags, err := url.ParseQuery(obj.UserTags)
 			if err != nil || len(parsedTags) == 0 {
-				addToCollectors(collectors, eventSentTagKey, tagValueUntagged, obj.Name)
+				for _, k := range untaggedKeys {
+					addToCollectors(collectors, k, tagValueUntagged, obj.Name)
+				}
 				continue
 			}
 			for key, values := range parsedTags {
@@ -840,7 +845,7 @@ func (mgr *TagIndexManager) migrateOldFormat(ctx context.Context, objAPI ObjectL
 			return
 		}
 		oldData = map[string]map[string][]string{
-			eventSentTagKey: veryOldData,
+			defaultEventSentTagKey: veryOldData,
 		}
 	}
 
@@ -1043,6 +1048,27 @@ func readZstdJSON[T any](ctx context.Context, objAPI ObjectLayer, filePath strin
 }
 
 // --- Utility helpers ---
+
+// configuredTagNames returns the distinct tag key names from all enabled
+// event_tag rules. Falls back to the default "EventSent" if none are configured.
+func configuredTagNames() []string {
+	cfgs := globalEventTagConfig.GetAll()
+	if len(cfgs) == 0 {
+		return []string{defaultEventSentTagKey}
+	}
+	seen := make(map[string]struct{}, len(cfgs))
+	var names []string
+	for _, cfg := range cfgs {
+		if _, ok := seen[cfg.TagName]; !ok {
+			seen[cfg.TagName] = struct{}{}
+			names = append(names, cfg.TagName)
+		}
+	}
+	if len(names) == 0 {
+		return []string{defaultEventSentTagKey}
+	}
+	return names
+}
 
 func addToCollectors(collectors map[string]map[string][]string, tagKey, tagValue, objectName string) {
 	if collectors[tagKey] == nil {
