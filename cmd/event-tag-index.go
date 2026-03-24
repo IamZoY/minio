@@ -105,6 +105,7 @@ type tagIndexUpdate struct {
 	objectName string
 	tagKey     string
 	tagValue   string
+	remove     bool // if true, remove object from all tag entries in this bucket
 }
 
 type compactRequest struct {
@@ -185,6 +186,35 @@ func SendIndexUpdate(bucket, objectName, tagKey, tagValue string) {
 	default:
 		internalLogIf(context.Background(),
 			fmt.Errorf("event tag index update channel full, dropping update for %s/%s", bucket, objectName))
+	}
+}
+
+// SendIndexRemove sends a non-blocking removal update to remove an object from
+// all tag entries in a bucket's index (used on object delete).
+func SendIndexRemove(bucket, objectName string) {
+	if globalTagIndexManager == nil {
+		return
+	}
+	select {
+	case globalTagIndexManager.updateCh <- tagIndexUpdate{
+		bucket:     bucket,
+		objectName: objectName,
+		remove:     true,
+	}:
+	default:
+		internalLogIf(context.Background(),
+			fmt.Errorf("event tag index update channel full, dropping remove for %s/%s", bucket, objectName))
+	}
+}
+
+// SendIndexFullUpdate sends index updates for every tag on an object.
+// Used when tags are set via the S3 PutObjectTagging API.
+func SendIndexFullUpdate(bucket, objectName string, tags map[string]string) {
+	if globalTagIndexManager == nil {
+		return
+	}
+	for k, v := range tags {
+		SendIndexUpdate(bucket, objectName, k, v)
 	}
 }
 
@@ -528,6 +558,26 @@ func (mgr *TagIndexManager) applyUpdate(update tagIndexUpdate) {
 	meta := mgr.getOrCreateMeta(update.bucket)
 
 	bd.mu.Lock()
+
+	if update.remove {
+		// Remove the object from every known tag key/value in this bucket
+		for _, tagValues := range bd.deltas {
+			for _, delta := range tagValues {
+				delete(delta.Adds, update.objectName)
+				delta.Removes[update.objectName] = struct{}{}
+			}
+		}
+		// Also remove from any tag keys tracked in meta but not yet in deltas
+		for tagKey, tagValues := range meta.Counts {
+			for tagValue := range tagValues {
+				d := bd.getDelta(tagKey, tagValue)
+				delete(d.Adds, update.objectName)
+				d.Removes[update.objectName] = struct{}{}
+			}
+		}
+		bd.mu.Unlock()
+		return
+	}
 
 	// Remove from old tag values under same key
 	if keyDeltas, ok := bd.deltas[update.tagKey]; ok {

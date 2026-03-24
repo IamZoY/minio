@@ -1762,6 +1762,18 @@ func (api objectAPIHandlers) CopyObjectHandler(w http.ResponseWriter, r *http.Re
 	// Write success response.
 	writeSuccessResponseXML(w, encodedSuccessResponse)
 
+	if objInfo.UserTags != "" {
+		if parsedTags, err := url.ParseQuery(objInfo.UserTags); err == nil {
+			tagMap := make(map[string]string, len(parsedTags))
+			for k, vals := range parsedTags {
+				if len(vals) > 0 {
+					tagMap[k] = vals[0]
+				}
+			}
+			SendIndexFullUpdate(dstBucket, dstObject, tagMap)
+		}
+	}
+
 	// Notify object created event.
 	sendEvent(eventArgs{
 		EventName:    event.ObjectCreatedCopy,
@@ -2708,6 +2720,10 @@ func (api objectAPIHandlers) DeleteObjectHandler(w http.ResponseWriter, r *http.
 		eventName = event.ObjectRemovedDeleteMarkerCreated
 	}
 
+	if !objInfo.DeleteMarker {
+		SendIndexRemove(bucket, object)
+	}
+
 	// Notify object deleted event.
 	sendEvent(eventArgs{
 		EventName:    eventName,
@@ -3277,6 +3293,8 @@ func (api objectAPIHandlers) PutObjectTaggingHandler(w http.ResponseWriter, r *h
 
 	writeSuccessResponseHeadersOnly(w)
 
+	SendIndexFullUpdate(bucket, object, tags.ToMap())
+
 	sendEvent(eventArgs{
 		EventName:    event.ObjectCreatedPutTagging,
 		BucketName:   bucket,
@@ -3381,6 +3399,8 @@ func (api objectAPIHandlers) DeleteObjectTaggingHandler(w http.ResponseWriter, r
 		w.Header()[xhttp.AmzVersionID] = []string{oi.VersionID}
 	}
 	writeSuccessNoContent(w)
+
+	SendIndexRemove(bucket, object)
 
 	sendEvent(eventArgs{
 		EventName:    event.ObjectCreatedDeleteTagging,
