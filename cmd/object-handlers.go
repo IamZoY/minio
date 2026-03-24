@@ -1773,6 +1773,13 @@ func (api objectAPIHandlers) CopyObjectHandler(w http.ResponseWriter, r *http.Re
 			SendIndexFullUpdate(dstBucket, dstObject, tagMap)
 		}
 	}
+	// When copying across buckets, remove the source from the old bucket's index.
+	// A "move" in S3 is a copy followed by a delete of the source; the delete
+	// handler will also call SendIndexRemove, but doing it here ensures the
+	// source index is cleaned up promptly even if the delete event is delayed.
+	if srcBucket != dstBucket {
+		SendIndexRemove(srcBucket, srcObject)
+	}
 
 	// Notify object created event.
 	sendEvent(eventArgs{

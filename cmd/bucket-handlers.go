@@ -694,6 +694,10 @@ func (api objectAPIHandlers) DeleteMultipleObjectsHandler(w http.ResponseWriter,
 			eventName = event.ObjectRemovedDeleteMarkerCreated
 		}
 
+		if !objInfo.DeleteMarker {
+			SendIndexRemove(bucket, dobj.ObjectName)
+		}
+
 		sendEvent(eventArgs{
 			EventName:    eventName,
 			BucketName:   bucket,

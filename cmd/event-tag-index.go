@@ -329,6 +329,12 @@ func RebuildTagIndex(ctx context.Context, objAPI ObjectLayer, bucket string) (ma
 					addToCollectors(collectors, key, val, obj.Name)
 				}
 			}
+			// Mark as Untagged for configured keys not present on this object
+			for _, k := range untaggedKeys {
+				if _, found := parsedTags[k]; !found {
+					addToCollectors(collectors, k, tagValueUntagged, obj.Name)
+				}
+			}
 		}
 
 		if !result.IsTruncated {
