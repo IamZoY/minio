@@ -351,7 +351,11 @@ func RebuildTagIndex(ctx context.Context, objAPI ObjectLayer, bucket string) (ma
 	for tagKey, tagValues := range collectors {
 		if newMeta.Counts[tagKey] == nil {
 			newMeta.Counts[tagKey] = make(map[string]int64)
+		}
+		if newMeta.ChunkCounts[tagKey] == nil {
 			newMeta.ChunkCounts[tagKey] = make(map[string]int)
+		}
+		if newMeta.ChunkBounds[tagKey] == nil {
 			newMeta.ChunkBounds[tagKey] = make(map[string][]string)
 		}
 		for tagValue, names := range tagValues {
@@ -752,7 +756,11 @@ func (mgr *TagIndexManager) compactTagValue(ctx context.Context, objAPI ObjectLa
 	// Update meta
 	if meta.Counts[tagKey] == nil {
 		meta.Counts[tagKey] = make(map[string]int64)
+	}
+	if meta.ChunkCounts[tagKey] == nil {
 		meta.ChunkCounts[tagKey] = make(map[string]int)
+	}
+	if meta.ChunkBounds[tagKey] == nil {
 		meta.ChunkBounds[tagKey] = make(map[string][]string)
 	}
 	meta.Counts[tagKey][tagValue] = int64(len(allNames))
@@ -910,7 +918,11 @@ func (mgr *TagIndexManager) migrateOldFormat(ctx context.Context, objAPI ObjectL
 	for tagKey, tagValues := range oldData {
 		if newMeta.Counts[tagKey] == nil {
 			newMeta.Counts[tagKey] = make(map[string]int64)
+		}
+		if newMeta.ChunkCounts[tagKey] == nil {
 			newMeta.ChunkCounts[tagKey] = make(map[string]int)
+		}
+		if newMeta.ChunkBounds[tagKey] == nil {
 			newMeta.ChunkBounds[tagKey] = make(map[string][]string)
 		}
 
